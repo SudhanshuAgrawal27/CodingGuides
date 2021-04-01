@@ -1,0 +1,469 @@
+git commands: shell
+
+git init  - creates a repository from scratch
+git clone - makes a copy of an existing repo
+
+$ git clone git://....... (some url) YOURNAME
+$ git clone DIR (local repo)   YOURNAME
+
+git add FILE  - you tell Git that FILE's current contents are 
+		part of an intended change to the system.
+		add to list of changes you want Git to know about.
+
+
+    edit the file you want to 
+    save it out
+    inside the repo,
+    $ git add file
+    This modifies the .git file. It adds it to the future plan
+
+
+git commit  - you tell Git you're happy with your changes, 
+	      and you want to make a commit.
+	      i.e., a new version in history, reflecting these changes
+
+$ git commit -m'Message associated with changes' 
+$ git commit -a       # add everything - no difference between local and final.
+
+A commit is a snapshot in time. It is the entire version. 
+
+
+git version algebra 
+	current version - V      V^ = previous version of V 
+				 V^^ two versions before V
+
+
+HEAD = current commit = current commit ID
+HEAD pointer points to the current commit you are working off of. i.e., the current version.
+every time you commit, you're creating a new version, so your HEAD moves to that
+
+
+working files = stuff you've currently saved
+plan = stuff that's gone through the add stage
+commit = version = current version of the repo after stuff has been committed
+	"latest commit" = "latest version" = the repo after the latest commit
+
+git diff 			- difference between your plans and the working files
+git diff --cached   		- difference bewteen most recent commit and your plans
+git diff A..B			- difference between versions A (earlier) and B (specify A, B by id)
+git diff A^!  			- difference between A's previous version and A
+
+		
+
+git diff    - so git diff tells you the difference between all the changes 
+	       that have gone through the 'add' stage (i.e. are in your plan) and all the changes 
+		that have only been made locally
+
+git diff B  - difference between branch B's latest commit and the working files.
+
+
+
+git checkout IDNUMBER 	- go to this version
+
+	Note, git clone copies the entire repo(with all the history), then it does a git checkout 
+	in the new repo so no you have a copy of all the working files.
+
+git checkout -f FILE     - copy the master version of FILE out of the history 
+			   and into the working FILE, and don't complain about it. 
+
+
+
+git log 		- history of all the versions 
+$ git log | head -n 20 
+
+git log A..B 		- all changes from A (earlier) to B
+git log A^!		- all changes in A only 
+git log --summary 	- shorter version
+git log --oneline
+
+git ls-files   		- list names of files under version control in current version
+
+
+git grep PATTERN	- all instances of the PATTERN in the current version
+
+git status 		- what's not in your history yet
+			- i.e., changes made in local but not added yet,
+			  as well as  changes added, but not committed
+			  - anything not committed
+			
+			and for the things committed,
+				it tells you how many commits ahead you are of the original
+
+			- all changes made
+
+
+git config -l 		- meta info about current repo 
+	inside .git/config 
+
+			- tells you stuff about who can access, username, etc
+
+
+git show COMMIT 	- tells you about the commit
+
+
+git blame some_func_name  - history of commits to that function 
+			  - used to try and discover when bugs were introduced.
+
+
+there are 3 repositories: 
+	the remote repository 
+	your local repository 
+	your working files
+
+
+git checkout - copy from your local repository to your working files (I want to work on this now)
+
+add, commit, etc are meant for interaction with your local repo
+
+when dealing with a remote repo, you need a way to talk with it.
+
+git fetch  		- copies the latest history from upstream (where you cloned from. look at 											git/config) 
+
+			- brings your local repo up to date 
+
+
+git merge     - brings the changes from the local repo into your working files (as a new commit)
+
+
+git pull     - git fetch + git merge + git checkout
+
+
+
+Bringing yourself up to date when following a project 
+	
+	git fetch  - fetches history changes from a remote repository 
+		     that's typically more up to date than you are
+
+		     does not change any of your working files
+			doesn't even change the HEAD (what you're comparing your working files against)
+
+		     only copies repository information from upstream
+			upstream = repository by the original developers that they're using to publish 
+					their work 
+		
+ 			brings all the new objects that have been developed in the remote repo
+			into your local repo
+				 
+
+	
+	git pull
+		1. git fetch
+		2. merges the upstream changes into your repository 
+			so it affects your HEAD
+		3. also changes your working files
+
+
+
+# can be helpful if you want to go back to a previous state
+# changes your working files
+	git reset HEAD^^	     # go back two commits but keep all the working changes
+	git reset --hard HEAD^^      # go back two commits and discard all the working changes
+
+
+
+modify files -> add -> commit -> push (if there's a remote)
+		
+All this is good if only one person is working. 
+
+
+When collaborating, use a remote repository.
+
+git clone URL 				# clones the remote repo
+
+git remote add origin URL		# sets the upstream to push
+
+git remote -v				# view the remote origin
+
+
+
+So if multiple people are working need branches.
+
+ 
+git branch <branchName> 		# create a branch 
+
+git checkout <branchName> 		# move the HEAD pointer to that branch
+					# so any commits go to this branch now
+
+git checkout -b <branchName>		# combines them, creates and checks out the branch
+
+# if the branch exits in the remote but not locally, 
+git fetch 
+git checkout <branchname>
+OR
+git checkout -b <branchName> <remote>/<branch>
+
+
+# suppose you made a branch locally, and it doesn't exist in the remote repo. 
+# to push it (while creating it in the remote repo)
+
+git push -u origin <branchName>
+OR
+try git push and it will suggest a command for you
+
+
+
+git merge <branchName> 			# merges branchName into current branch (and creates a new commit)
+
+sometimes it works fine 
+
+	main
+c1 <--- c2 <---- c3 < ---- c4 
+			   B1
+
+No divergent history so it's a fast forward merge - main just catches up 
+
+but if there is divergent history, we have a threeway merge 
+
+
+
+	 ---c5 ---- main 
+	 |
+c1 <--- c2 <---- c3 < ---- c4 
+			   B1
+
+
+if you try to merge at this point, it won't merge it automatically 
+will throw up an error 
+and modify the files 
+so you go in, and modify it as you want to. 
+
+then add changes
+commit changes
+
+Incoming = the stuff you've fetched
+Current = your local files 
+
+
+git branch -d <branchName>  		# deletes the branch
+you can tell Git to garbage collect all objects not pointed to by any branch
+
+
+
+Rebasing (alternative to merging):
+suppose you have a mainline  1 - 2  - 3 - 4 - 5 - 6 - 7 - 8- 9- 10( main) 
+at commit 4, you decided to make a branch exp 
+you then do your commits to exp while main goes on to version 10.
+
+merging exp to main would mean that you do some commits to make it compatible, 
+then have a merge commit into main with two parents. 
+
+instead, rebasing is like coming up with a small set of patches that would change main to make it exp
+	1 - 2  - 3 - 4 - 5 - 6 - 7 - 8- 9- 10( main) - p1 - p2 - exp 
+
+so we'd have only one actual parent. no actual merging.
+
+$ git checkout exp 
+$ git rebase main
+
+
+git rebase -i main # interactive rebase 
+	This lets you edit the series of patches you're constructing in your branch 
+	It gives you a text file listing your changes 
+		You can edit it to come up with a different set of changes 
+
+git format-patch main 
+	generates a series of patch files from main 
+		suppose you have 7 commits separating you from master 
+		git rebase -i main 
+			lets you edit a set of 7 commands 
+				by default you pick a commit (you keep it)
+				you can omit one, 
+				you can change its or its commit message
+				you can reorder commits 
+				you can squash adjacent commits 
+
+
+Note, 
+$ git rebase <branchName> 
+means add commits to <branchName> to bring it up to speed with the current branch
+
+
+
+Git internals: 
+The data structure used isn't general-purpose. It's meant to be simple and specialized for Git. 
+
+Compression: 
+
+- Huffman coding 
+	Assume the input is a sequence of symbols (liek bytes, with 256 possibilities)
+ 	Look at all the symbols in the input file. 
+	You want common symbols to have a short representation (less than 8 bits) 
+		 rare symbols have a long representation (more than 8 bits)
+
+	build a binary tree with the leaves being the symbols. 
+		each node = char, with weight = frequency 	
+		take two nodes with smallest weight, connect them to a third node with weigth = sum of weights 
+		repeat process
+		
+		in the resulting binary tree, each char can now be encoded by 0 (left) and 1 (right)
+	
+	O(N) 
+	But, for this to work, the sender and the recipient have to agree about thw tree. 
+
+
+	the compressed file would start off with a header specifying which tree to use. 
+	But this means gzip would have to read its input twice - to calculate counts, and to generate the compressed str
+
+	gzip optimzes this
+
+
+- Dictionary coding 
+	Look for 'words' in the input and assign integers to each distinct word, and then output the integers. 
+	Sender and recipient use the same algo to generate th dictionary as we go. 
+	Sender and recipient start off with an empty dictionary. 
+	Sender reads, sends first symbol as-is (output is a mixture of integers(words) and plain symbols). 
+	It updates its dict accordingly.
+		1 "N"
+		it then repeats for each symbol
+		1 "No"
+	we send integers only once the dict gets large enough. 
+		- the dict can get large 
+
+		so gzip uses a sliding window (only last 100kb contribute to the dict) 
+
+	gzip uses both algos. 
+
+
+
+
+Git: 
+
+The .git subdirectory 
+- Typically at the top level of your project   myproject/.git 
+
+- stores the state of your local repo
+
+Inside .git/
+	branches - folder - obscolescent (for bwd compatibility)
+	config - file  - for .git configuration - name, email, signing key, remote, url, 
+	description - file - description when you publihs on websites
+	HEAD - file - contains name of current HEAD (like ref:refs/heads/master)
+	FETCH_HEAD - file - contains name of HEAD for 'git fetch'
+	hooks - folder - hook scripts where you can alter what git does. 
+			A hook lets you take control from Git while it's at an appropriate point in its actions
+			*.sample are sample scripts you can use for real hooks 
+			ex. checks your commit messaage for formatting, if it's bad it can tell Git not to accept it
+	index -file- staging area for your proposed next commit 
+	info/exclude  - file - globbing patterns of filenames that you want Git to not pay attention to and not put in a 
+				.gitignore file. 
+
+			You place .gitignore file under Git control, so you keep track in Git of what files
+			you want Git to ignore. 
+	
+	logs -  - records for when tips of branches etc were updated. lets Git know where (for example) where HEAD was 3
+			moves ago. where a move is a Git command that updates your repo
+			logs : repository :: repository: sourcecode 
+			 X records changes to -> Y
+			Can answer questions like who renamed branch B to C? 
+
+
+	objects - folder - main part of the repo - all the data (all the version) are stored here. 
+				most of these objects are just byte sequences (blobs)  
+			   objects/<first two chars of commit name>/<rest of commit name>
+				each file contains the entire version (of a FILE) in a compressed format 
+
+	refs - folder - 
+			/heads contains files corresponding to branches 
+			each file contains the actual commit ID of the branch head
+			i.e., the commit where the branch was created (first new commit of branch)
+
+			
+
+	packed-refs - optimized version of refs
+
+
+
+Git objects: 
+	types: 
+		blobs (regular files)
+		trees (directories)
+		commits (special type of objs)
+
+All of these objects are of the form 
+		ad/adffasdfdasfhrff 
+
+
+
+blob (sequence of bytes) 
+	usually corresponds to a commited version of a file 
+	Naming: needs platform independent name for the blobs 
+		(160 bits expressed in hexadecimal (40 chars))
+
+		has to be extremely unlikely for two different byte sequences to hash to the same value 
+		the crypto people developed hash functions with this property 
+
+		Git uses SHA-1  
+			you can hash an object manually with 
+			$ git hash-object somefile 
+			it will store this in your refs/
+
+
+
+trees (objects that represent directories)
+	A tree is a set of tree entries each with: 
+		name 
+		type (blob, tree)
+		mode (octal number, rwx values as numbers)
+		
+
+	similar to the output of $ ls -l      git(permissions, type, uid )
+
+	
+	
+every time you make an update, you add new blobs and trees to the repo. 
+	If we change a single character in some file, 
+		we generate a blob for the new contents of the working file, 
+		we generate a tree for the new contents of its parent directory 
+			and we add that to the repo too 
+		this might mean several objects need to get added
+			resulting in a new root dir for the update system
+	
+
+a commit is an object that represents a new root directories (a tree) along with metainfo 
+(commtiter, timestamp, etc)
+
+
+Not all the ab/adfadskfewfh files (objects) are commits. 
+some of them are, and they represent the new root directory (which would mean they are a tree)
+
+The rest of the fd/dfadfdsafdhf files (objects) represent versions of other files (blobs) and other directories (trees)
+
+so if you were to choose those objects which are commits, you would be choosing the objects that represent the root directories and are thus tree type objects. 
+
+that's why when we did assignment 6, we had to use the branch heads to figure out which were commits and use the metainfo inside the commits to figure out which of the ad/adfdsafasdf were the others commits. 
+
+
+
+in git, as a graph, the child points to the parents 
+       ---
+       --- earlier commit (parent)
+	^
+	|
+       ---
+       --- current commit (child)
+
+
+
+Cloning locally doesn't copy the entire repo
+	most of the files are simply linked to, via hard links 
+	
+	the req is that Git had better not modify the file. 
+	it never modifies any existing file in the object part of its repo. 
+	it only creates new objs, never modifies old ones. 
+
+	The basic idea is that Git's existing history should never change. 
+	Append only. 
+	Don't put in passwords!
+
+
+
+
+
+
+
+
+
+
+
+		
+

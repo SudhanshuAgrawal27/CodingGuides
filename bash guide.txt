@@ -1,0 +1,558 @@
+========================================================================================================================
+bash/shell (POSIX) guide - Sudhanshu Agrawal (sudhanshu.agrawal@ucla.edu)
+========================================================================================================================
+Guide made for the POSIX shell while taking the course CS 97, Winter 21 at UCLA
+========================================================================================================================
+
+$ cmd				# run command
+$ cmd arg1 			# run cmd with positional arg1
+$ cmd -n arg1			# run cmd with optional argument arg1 of type -n
+$ cmd arg1 arg2			# run cmd with arg1 then arg2 (if it only accepts one arg)
+					note, space can cause issues 
+					$ rm -rf . * 	 		# will remove everything with . then *
+
+
+
+$ ls 				# list contents of directory
+
+
+	 	 # can be modified  
+		-d   directories
+		-l   long listing format (like details view in windows)	
+		-t   sort by date modified
+	   	-a      hidden directories also		(if a file name starts with a  .   
+							it means it is hidden in linux)
+			
+
+		# can specify file names to be looked for 
+		$ ls a* 		# a must be followed by other chars
+		$ ls a*c		# a, other chars , c in that order
+
+		note, in ls you can't put the pattern in " ", it must be on its own.
+		Also note, this globbing pattern will differ from regexp syntax
+
+
+Typically, 
+$ ls -la     			# everything in long list format
+
+
+$ Ctrl + z			# suspend (put job in background)
+
+$ fg				# retrieve last job from background, put in fg 
+$ jobs 				# currently active jobs
+$ fg %jobnum			# put that job jobnum in the fg
+
+
+$ pwd				# print working directory
+$ cd ..				# go one level above in directories 
+$ cd destination		# change directory to destination
+$ cd 				# go to home directory
+
+	
+/	corresponds to the root/home directory - all file paths start there
+
+~/  	corresponds to "start at home directory"
+
+suppose we're at a particular directory, but we want to access a file in the above dir
+we could use the absolute path, but relatively we could instead use: 
+$ ../dirIwant/fileIwant
+
+
+
+$ cp sourcename targetname      # copy a file
+$ mv source destination		# rename a file
+
+$ touch filename 		# make a file
+$ mkdir directoryname		# make a directory
+
+$ rm filename			# remove file 
+$ rm -r directoryname		# recursively remove the directory 
+
+
+$ man commandname		# manual page (info about command)
+$ which command			# path of the particular command being used
+				find sy# (which executable is picked?)
+
+
+$ cat file			# print out contents of file  
+
+	$ head file		# print out first 10 lines
+	$ tail file 		# print out last 10 lines
+				# outputs to stdout
+
+$ echo "PRINT THIS" 		# printing a message/variable 
+$ echo  $x    -> 5
+$ echo '$x'   -> $x		# single quotes gives val as it is
+$ echo "$x"   -> 5		# double quotes expand variables
+
+
+
+$ x=5 				# create variable (*no spaces*)
+				# stored in session 
+$ unset x			# unsets the value of the variable 
+
+
+$ seq 5				# create a sequence of numbers
+
+------------------------------------------------------------------------------------------------------------------------
+chmod: CHMOD - Change file mode bits
+
+	(r)ead, (w)rite, e(x)ecute
+	if there's a letter => have that permission
+	if theres' a - => don't have that permission
+
+	-(rw-)(r--)(r--)    
+	 user group everyone else's permissions
+	 you can see this through $ ls -l
+
+
+	 -(rwx)(r--)(r--)
+	   111  100  100 
+	    7    4    4
+$ chmod         744         myfile 
+$ chmod          +x 	    myfile 		# gives x = execute permission
+
+------------------------------------------------------------------------------------------------------------------------
+tr: TRANSLITERATE
+
+$ tr SET1 SET2 			# convert instances of SET1 to SET2 in the STDIN
+$ echo hello world | tr "o" "a"
+$ tr -c  			# use the complement of SET1
+$ tr -s                         # squeeze any sequences of repeated 
+				# characters that were replaced   aaa -> a
+				# i.e. replace, then if replaced, squeeze 
+
+
+$ tr SET1 [CHAR*]               # SET2 = CHARCHARCHARCHAR.... length of SET1
+				# replaces all chars in SET1 with CHAR
+------------------------------------------------------------------------------------------------------------------------
+sort: SORTING and COMPARING
+
+$ sort file			# sorts input line by line
+$ sort -u file 			# sorts and gives unique
+$ sort -r file 			# sorts in reverse order
+
+
+$ comm file1 file2 		# compares *sorted* file1 and *sorted* file2
+				# and retuns unique and common lines to each file
+
+				# col1 = lines unique to file1 
+				# col2 = lines unique to file2 
+				# col3 = common lines
+
+$ comm -123			# suppress col1,2,3
+
+------------------------------------------------------------------------------------------------------------------------
+FIND:
+
+$ find DIRNAME				# find files in this directory - like ls
+
+$ find DIRNAME -name "PATTERN"		# find files in DIRNAME with name PATTERN  
+					  NOTE, must include -name if you're trying to search by name
+
+
+
+$ find .  -executable -name "?r"     # find from current directory onwards
+				     # executable files 
+				     # with name = any character followed by r
+
+
+$ find .  -type f  -name ".*"	     # find regular files with name starting with .
+$ find .  -type d  -mtime -28        # find dirs modified in the last 28 days 
+
+
+------------------------------------------------------------------------------------------------------------------------
+IO redirection: $ command 0<inputfile  1>outputfile  2>errorfile 
+
+0 stdin = input to terminal from keyboard
+1 stdout = output to terminal to screen
+2 stderr = output to terminal to screen
+> means send to out/err   
+< means send to in 
+>> means append to that file 
+1>&3 means make stdout (0) whatever (3) points to. 
+
+$ cat file > somefile  			  # "print" to somefile
+
+$ cat file > somefile 2 > stderr.file     # print to somefile and error to stderr.file
+
+$ command 0<&- 			          # closes stdin   
+
+$ cmd1 <input | cmd2 >output 2>err	  # usage with piping 
+
+$ a 2>&1 | b  			$ make a's stream 2 go to wherever stream 1 is going, which in this case is b's 0 stream. 
+
+$ (a | b) 2>outputfile		$ do your stuff for a|b and send all errs that occur in ( ) to outputfile
+
+
+If you're trying to input something from stdin, terminate with EOF = Ctrl + d (twice if necessary)
+$ shuf 
+> 1
+> 2
+> 3
+Ctrl + d (twice if necessary)
+
+
+------------------------------------------------------------------------------------------------------------------------
+IMPORTANT NOTE: globbing patterns and regexp are annoyingly similar
+
+But globbing is used for PATHNAMES 
+And regexp is used for TEXT
+
+So we'd use globbing for: ls, find
+	    regexp for:   grep
+
+------------------------------------------------------------------------------------------------------------------------
+GLOBBING PATTERNS:			# A syntax to specify PATHNAMES
+It expands a pattern into the list of pathnames matching the pattern.
+
+Wildcards: ?, *, [
+
+?   matches any single character		
+    i.e., exactly any one character can fill that one position
+
+	Ex. 	$ ls ab?			# all files that start with ab followed by exactly one character
+
+*  matches any string, including the empty string
+   i.e., any string can fill that position
+
+	Ex.  	$ ls a*				# all files starting with 'a' followed by any string
+
+
+Character classes:
+	i.e., any character in the class could occupy that position
+	Enclosed in [    ]
+		[xyz]				# any character from x, y, or z can occupy that position
+		[a-z]				# any character from a-z can occupy that position
+		[:alnum:], [:alpha:], [:digit:]	# any character from these classes can occupy that position
+						# Note, they must be included in ANOTHER []
+							[[:alnum:]]	
+
+
+	special cases:
+		-  can be matched if it's in the first or last position.
+		[  can be matched if it's not the first character
+		]  can be matched if it's not the last character 
+			Note, [ ] cannot contain the empty string, so
+			      []] will match ']'
+		/  cannot be matched by ?  or *  or included in a character class
+
+
+
+
+Complementation (!)
+	any character can be in the position if it's not in the current [  ]
+
+	Ex. 	[!a-z]			# any character that is not a-z can be in the posiiton
+
+
+
+Example usage:
+# list only the hidden files
+		$ ls .[^.]*			# all files starting with .  any char not dot  any string
+
+# all files that contain an expression anywhere 
+		$ ls *a*			# all files that contain anyString a anyString
+						# i.e. all files containing 'a'
+
+
+------------------------------------------------------------------------------------------------------------------------
+REGEXP:  				# A syntax to specify patterns in TEXT
+
+Characters:
+include the list of characters in a [   ]
+
+[Char1Char2Char3]			# matches any single character in the list
+
+[^Char1Char2]				# matches any character NOT in the list 
+
+[a-z]					# matches any character in the range a-z
+
+[:alnum:], [:alpha:], [:digit:]		# character classes
+[:upper:], [:lower:]
+Ex. [[:alnum:]]		[^[:alnum:]]    # note, character classes must be inside ANOTHER [  ]
+
+Special cases, to include the character '^', place it anywhere but first, 
+	       to include the character '-', place it last.
+
+
+Join two regexps using the | operator
+	i.e., any lines that match either of the regular expressions
+
+  	$ grep -E "th|au" myfile		# all lines that contain "th" or "au"
+
+
+NOTE:
+If you want to use the fancy commands below (ERE's), 
+you must add the option -E  to stuff like grep
+	Commands not included in BRE: ?, +, {, |, (, )
+
+Alternatively if you want to use them within BRE's, 
+you could escape the characters using a backlash like:  '\?'
+	Ex. 		$ grep "the\?" myfile			# will work the same as 		
+								# grep -E "the?" myfile
+
+Of course, if you are in -E mode and you do '\?',
+it will treat it as a regular question mark
+
+
+Repetition: 
+A regexp is FOLLOWED by one or more repetition operators
+
+?   the preceding item is optional	
+	$ grep -E "the?" myfile		# all lines that have 'the' or 'th', the 'e' is optional
+	$ grep -E "a?"	 myfile		# just returns all lines in the file since a is optional
+					# useful if you have an optional char in the middle of a word
+
+
+*  the preceding item must be matched zero or more times
+	$ echo "thaaaanks" | grep -E "tha*n" 	# matches. normally, "than" would not return a match 
+						# but we're allowed to repeat 'a' as many times as we want.
+						# it's optional and at the same time we can use it infitely many times
+						# again, very useful if it's in the middle of a sentence like above.
+
+
+
++  the preceding item must be matched one or more times
+						# very similar to *, except that you must have atleast one occurence
+						# no longer optional
+						# but still infinitely many times allowed
+
+	$ echo "thaaaanks" | grep -E "tha+n"	# still detected
+	$ echo "thnks"	   | grep -E "tha+n"	# not detected
+					
+
+{n}   the preceding item must be matched exactly n times
+{n,}  the preceding item must be matched n or more times
+{,m}  the preceding item must be matched at most m times
+{n,m} the preceding item must be matched at least n times, but not more than m times.
+
+		
+
+------------------------------------------------------------------------------------------------------------------------
+grep: GREP				# search for LINES that have words that match the PATTERN
+					# prints each line that matches the pattern
+ 
+$ grep "PATTERN" FILE 			# filters and only outputs files having that pattern 
+
+$ grep -v CHAR				# filters out CHAR
+
+$ ls | grep -v /			# filters and only outputs files 
+
+$ grep "^CHAR"	FILE			# CHAR should occur at the start of the line
+
+$ grep -i "PATTERN" FILE		# ignore case.
+
+
+------------------------------------------------------------------------------------------------------------------------
+sed: SED				# modifies streams of TEXT
+
+
+$ sed COMMAND FILE			# operates on the file/stdin
+
+-n  option				# suppress automatic printing
+
+'p' = print
+
+	$ sed -n '1p' myfile		# print every line in the file
+	$ sed -n '1,5p' myfile		# print lines 1-5
+	$ sed -n '1,+4p' myfile		# print first 4 lines after 1
+	
+
+	$ sed -n '1~2p' myfile		# print every 2 lines in the file after line 1
+
+
+'d' = delete
+
+	$ sed '1~2d' myfile		# delete every two lines in the file
+
+
+
+'s' = substitute patterns
+replaces the MATCHED pattern with the pattern you specify 
+
+
+$ sed 's/old/new/option' myfile 	# substitutes old word with new word in myfile 
+
+$ sed 's/apple/orange/'  myfile		# substitutes only the FIRST occurence of apple with orange
+
+$ sed 's/apple/orange/3' myfile 	# substitues the third occurence of apple with orange
+
+$ sed 's/apple/orange/g' myfile		# substsituets all occurences of apples with organge
+
+
+Each pair+option needs 3 slashes /
+The character after s is the delimiter between multiple words
+
+
+$ sed 's_/apple/orange/3_/tea/coffee/5_' myfile
+
+
+& stands for the matched string - i.e. the pattern found.
+	useful when you're searching for patterns
+
+echo "abc" | sed 's/[a-z]*/(&)/'		# place the matched bit in parentheses
+	---> (abc)		
+
+
+If you want to find repeated patterns, 
+you can first mark a pattern using \( PATTERN \)
+then reference it anywhere else using  \1 	# the first remembered patttern - second would be similar
+				
+
+sed will match the first string, and be as greedy as possible - so it will include as many as possible if they are consecutive.
+so if you want to stop after the first match and only remember that part with your \( \) \1 combo, then you 
+add in the .* option
+$ echo "abc1234" | sed 's/\([a-z]*\).*/\1/'
+
+	-----> abc
+
+
+Also, if you want to use ERE's you must include -r option
+
+sed -r 's/[0-0]+/(&)/'
+
+
+Multiple seds:
+sed "s/a1/a2/opt;s/b1/b2/opt"
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+PIPE:
+Lets you PIPE output from one command as input to a second command
+$ ls -l | wc -l  
+ all the files | number of lines in stdin
+= total number of files
+
+$ (a | b) 2> errfile   # all the errors that occur in (a | b) are sent to errfile 
+
+------------------------------------------------------------------------------------------------------------------------
+Command substitution:
+
+Assigning the output of a command in a variable
+var=$(cmd)
+
+or, `cmd`
+
+output goes to shell which constructs a new command from it.
+it treats the output as CODE. 
+copying data into code. 
+
+
+x=$(pwd)
+a="$(find /usr/bin | grep a$)"
+b="$(echo "$a" | grep [^[0-9]*$)
+
+cp $(find . -type f) dirname
+
+
+the $( ) can even give a command as an output. 
+
+------------------------------------------------------------------------------------------------------------------------
+Process substitution: 
+Passing the output of a process to another process
+diff <(cmd1) <(cmd2)		# note that there must not be space between <(
+
+------------------------------------------------------------------------------------------------------------------------
+Referencing arguments:
+If you have multiple input arguments from stdin and want to reference them in some command / bash script
+
+cmd $1 $2	
+
+------------------------------------------------------------------------------------------------------------------------
+Symbolic Links:
+$ ln -s filename symlink	# creates a link to a particular file NAME
+				# points to whatever file has that name.
+				# dangling symlink if no file with that name exists
+$ readlink symlink 		# the file that symlink points to
+
+Usage: 
+symlink is almost as good as another name for the file
+you use it the same exact way
+$ emacs symlik			# opens up the file symlink points to
+				# if you modify it, it modifies the file as well
+
+$ cat symlink			# prints out the contents of the file pointed to by symlink
+
+The only difference is removing a symlink doesn't remove the file.
+
+If the file pointed to by the symlink is removed, it's called a dangling symlink
+To fix this, you can either 
+	update the symlink
+	ln -sf newfile symlink 		(add the -n option if it's a folder)
+	
+	or you could create a file with that name
+	touch filename
+
+symlinks are used for directories since directories are only allowed one name.
+
+
+------------------------------------------------------------------------------------------------------------------------
+Control flow: 
+
+If statements:
+
+if cat y				# succeeds 
+ then echo a
+ else echo b
+fi 
+
+
+------------------------------------------------------------------------------------------------------------------------
+While loops:
+
+while CMD1 				# succeeds
+  do CMD 
+done
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+Shell scripts: 			  
+
+	#!/bin/bash		    # directs you to the abs path of bash (a shell)
+			    	    # must have at the top of every file
+
+	echo "hello" 
+	ls 
+	echo "hello"
+
+
+
+exiting a shell script: 
+	$ exit number 			# 0 = success, anything else = failure, you can define using exit
+
+Note: pipeline's exit status is that of its last command 
+	cmd1 | cmd2 | cmd3  		# cmd3 's status is what matters 
+
+
+
+$ ./permutation.sh 		# runs shell script
+
+------------------------------------------------------------------------------------------------------------------------
+
+to set the path (to look for executables)
+
+	1. create a file :   
+	emacs ~/.bash_profile 
+
+
+	2. add the following text in the file: 
+
+	export PATH=/usr/local/cs/bin:$PATH
+	echo "[INFO] [~/.bash_profile] Updated PATH to -- $PATH"
+
+
+	3. tell bash to look there : 
+	source ~/.bash_profile 
+
+------------------------------------------------------------------------------------------------------------------------
+
+download a webpage using wget:
+	wget -E URL 
+				The -E makes sure that the extension is .html
+
+------------------------------------------------------------------------------------------------------------------------
+difference between two files:
+	$ diff -u file1 file2 > filediff

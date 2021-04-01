@@ -1,0 +1,164 @@
+HTML creates structure, JS lets you control the structure. 
+
+To run JS, run on Node or run in browser
+
+Open in browser:
+Developer tools in browser/ Inspect element 
+
+Declaring variables:
+
+$ let x = 1 
+$ const y = 2 
+
+$ x += 1 
+if (x > 0)		# note that if statements are in the C++ style if()
+{
+let z = 3 
+}
+
+
+Typically, when we want to assign immediately we say
+	const y = 2
+
+If we're just creating a global variable to be used we say,
+	let y;
+
+
+Printing to console: 
+console.log("Hello")
+
+
+Comments: 
+// This is a comment. Java style comments
+
+
+Objects: 
+let movie = { title: "The one movie", 		# note, no "key" 
+						# quotes around the key
+	      year: 1980			# like dicts in python
+		}						
+
+movie.rating = 10 
+
+
+
+Manipulating the DOM: 
+1. Get the objects on the page using identifier (HTML tag, ID< Class, CSS selector) 
+2. Manipulate the element 
+
+let someElement = document.getElementByID("p1") 
+someElement.innerHTML = "New Text in Paragraph 1" 
+
+
+
+Functions: 
+
+function func1(param1, param2)
+{
+	console.log(param1, param2) 
+}
+
+function func2(param1, param2) => { console.log(param1, param2) }
+
+
+
+Handling Events: Input from user
+
+function changeColorToRed()}
+this.style.color = "red"
+}
+
+let someElement = document.getElementByID("p1")
+someElement.addEventListener('click', changeColorToRed)
+
+
+
+
+How to load in a JS file?
+
+In your HTML file, 
+<script src = "https://..." .. > </script>
+
+
+Arrays: 
+	myarr = Array(9).fill(null);
+
+	doubarr = myarr.map( x => x*2);
+
+
+
+Sets: 
+	myset = new Set();
+	myset = new Set([1, 2, 3,]);
+
+	myset.add(5);
+	myset.has(5);
+
+
+
+NODE:
+
+
+npm init - creates a new package in that directory - like julia> ] activate 
+npm install pkgname				# installs pkg
+
+
+
+
+Creating a server:
+
+const http = require('http')
+const ip = '127.0.0.1'
+const port = 3000
+
+const server = http.createServer((request, response) => {
+			response.statusCode = 200 
+			response.setHeader = ('Content-Type', 'text/plain')
+			response.end('This is just a toy server. \n')
+			})
+
+
+	server.listen(
+		port, ip, 
+		() => {
+			console.log('Server running at http://${ip}:${port}/')
+			}
+		     )
+
+node app.js
+
+telnet 12.0.0.1 3000         OR http://127.0.0.1:3000    in browser
+
+
+
+
+
+
+
+
+
+
+React:
+   Frontend JS Framework 
+   Pairs with a separate backend (need Node)
+
+
+Refer to React guide from this point
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

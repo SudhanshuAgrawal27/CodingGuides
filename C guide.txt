@@ -1,0 +1,108 @@
+
+in C, no classes
+only structs - only data - no methods
+
+
+in C++, you have 
+	myObject.someMethod()
+	
+
+in C, you need
+	someFunction(&myStruct)
+
+
+in C, no passing by reference
+void fn(int *num)
+{
+	*num++
+}
+x = 10;
+increment(&x); 		// need to pass the address, no passing by reference
+
+
+Passing functions as parameters
+
+int add(int x, int y)
+{
+	return x + y;
+}
+int (*math_fn_ptr)(int, int) = add;
+int result = math_fn_ptr(5, 1);
+
+Strings: 
+no strings.
+char arrays only 
+char *name = Daniel;
+
+Printing: 
+printf("I was born in %d, and my name is %s", year, name);
+
+malloc: 
+void *malloc(size_t size)
+int  arrayLength = 10;
+int *numbers = malloc(arrayLength*sizeof(int));
+for(int i = 0; i< arrayLength; i++)
+{
+numbers[i] = 1;
+}
+
+free:
+free(numbers);
+
+realloc: 
+char* line = malloc(sizeof(char)*10);
+char* bigLine = realloc(line, sizeof(char)*100);
+// at this point line is invalid
+// transfers over the data
+
+
+
+System calls - read/write
+# include <unistd.h>
+//write n number of bytes from files described by fd to buffer
+int bytesWritten =         write( int fd,     void* buffer, size_t n)
+how much was actually written   where to write    what      how much 
+
+
+
+int bytesWritten = write(STDOUT_FILENO, output_arr, 10*sizeof(char))
+
+What is a fd?
+	fd is a file descriptor. It is an integer which represents an open file handle
+	STDIN, STDOUT, STDEERR are alerady open for you at the start of the program	
+	0 	1 	2
+Buffer:
+	Typically some kind of array
+
+
+Compiling:
+	g++ car.cpp navigation.cpp engine.cpp -o car_executable
+
+	But takes a while and if you need to change a file need to redo
+
+Makefile: 
+	Allows you to specify compile rtarets/commands and dependencies 
+	so it only builds objects as necessary.
+
+
+target: prereqs
+	cmd
+
+all: car
+
+car: car.cpp engine.o sensor.o navigation.o
+     g++ -g -Wall -o car car.cpp engine.o sensor.o navigation.o
+
+engine.o: ...
+	.....
+
+clean: 
+	rm -f engine.o sensor.o navigation.o car
+
+
+usage: make 		- default target
+       make all 
+       make <target>
+
+
+

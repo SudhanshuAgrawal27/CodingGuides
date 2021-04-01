@@ -1,0 +1,108 @@
+======================================================================
+Emacs guide - Sudhanshu Agrawal (sudhanshu.agrawal@ucla.edu)
+======================================================================
+Guide made for Emacs while taking the course CS 97, Winter 21 at UCLA
+======================================================================
+
+
+$ emacs filename.txt 			# new file 
+Or, while in emacs, 
+	Ctrl + x + Ctrl + f filename		# new file / opens file
+
+The #file.txt# that shows up is the Emacs backup. Once you save your file, this gets deleted. 
+The ~file.txt that shows up is the initial state of the file before you started editing
+
+
+$ Ctrl + x  Ctrl + c			# close file (will give option to save)
+$ Ctrl + x  Ctrl + s 			# save file 
+
+$ Ctrl + f				# move forward a character
+$ Ctrl + b  				# move backward a character
+$ Alt + f				# move forward a word
+$ Alt + b				# move backward a word
+$ Ctrl + n				# move to next line
+$ Ctrl + p 				# move to previous line
+$ Ctrl + a				# move to beginning of line
+$ Ctrl + e				# move to end of line
+$ Ctrl + v 				# move down a page
+$ Alt + v 				# move up a page
+$ Alt + < 				# move to beginning of doc
+$ Alt + >				# move to end of doc
+
+$ Ctrl + g				# terminate the current command
+
+
+$ Ctrl + s 				# search forward
+$ Ctrl + r				# search reverse
+$ Ctrl + s Ctrl + s			# repeat previous search
+$ Alt + x   count-match			# number of occurences
+$ Alt + %				# query replace shows instances of word one by one
+					# then prompted 
+					# y - yes replace
+					# n - no replace, skip
+					# ! replace this one and all remaining occurences
+					# Ctrl + g cancel
+
+$ Ctrl + Alt + s 			# regexp search
+$ Ctrl + Alt + s  (x2 times)		# repeat previous search
+
+
+$ <DEL> is backspace in all literature
+$ Ctrl + d is delete
+
+
+$ Ctrl + k 				# kill the line after current point
+
+
+$ Ctrl + /				# undo
+$ Ctrl + g  Ctrl + / 			# redo
+Ctrl + g reverses the direction of undo/redo
+
+
+$ Ctrl + x  Ctrl + b			# list of buffers
+$ Ctrl + x + o 				# move to other window
+$ Ctrl + x + 0				# close this window
+$ Ctrl + x + 1 				# close all other windows
+$ Ctrl + x + 2				# open new window below
+$ Ctrl + x + 3 				# open new window on the right
+
+scratch buffer can be used for lisp evaluation - Ctrl + j 
+
+
+$ Ctrl + h 				# help 
+Ex.
+$ Ctrl + h k ENTER			# tells you what ENTER does
+$ Ctrl + h b				# lists all key bindings
+$ Ctrl + h m				# current mode
+$ Ctrl + h k  KEY			# what does the keystroke do keystrokes
+					# once in the command page, RET on the source file to see i
+$ Ctrl + h + f  FUNCNAME		# describe function
+
+
+
+# to select a bit of text: 
+					# go to beginning of text 
+Ctrl + SPACE				# set a marker: 
+					# go to end of text 
+
+Ctrl + w				# cuts the selected portion
+Alt + w 				# copies the selected portion
+Ctrl + y				# pastes the cut/copied text -yank
+
+
+Alt + x 				# running commands
+
+$ Alt + x  shell			# opens up a pseduo terminal (pty)
+					# and runs a shell in that terminal
+
+
+$ Alt + !  				   # to run a shell command (; in julia)			
+$ Alt + x make-directory RET  dirname RET  # make dir in cwd from within emacs
+
+$ Alt + x  cd  RET  dirname		   # change cwd
+
+$ Alt + x compile RET filename		   # compile a file in emacs
+
+to set the theme, inside emacs type 
+M + x customize-theme   
+select the theme , and then save out the file Ctrl + x  Ctrl + s

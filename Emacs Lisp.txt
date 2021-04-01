@@ -1,0 +1,65 @@
+In Emacs,
+Ctrl + x + b + Enter 	# takes you to the scratch buffer to execute lisp commands.
+
+; 			# comment entry
+
+( ) 			# function calls in parens
+
+
+Ctrl + j 		# execute line of code )
+
+Alt + :			# open Eval buffer which can execute a statement
+
+
+
+# printing
+
+(message "print this")		# printing in lisp
+(message "print %s" string)	# sub in the string
+(message "print %d %d" 1 2)	# sub in 1 and 2 as integers
+
+
+# if-else
+
+(if (> 3 5) 
+	(message "3 is greater than 5")   ; if part 
+   (message "3 is not greater than 5"))   ; else part  comes right after (no explicit else)
+
+
+
+
+# defining a function 
+(defun funcname (args) 
+	(* 7 args))
+
+'
+# defining a variable 
+
+(let ((x 1) (y 2)) 		# locally (note the double parens for all the vars you're setting)
+	     (-x 2))		# use it locally in that scope
+
+
+(setq x 1)			# globally set it 
+(+ x 2) 			# can use it outside scope. 
+
+
+
+# exponentiation
+(expt base power)	
+
+
+# min and max point in the file 
+(min-point)   
+(max-point)
+
+
+# once you've made your functions, you want to load those
+# into your emacs buffer to be used during your session 
+
+$ Alt + x load-file  filename  # all the funcs are available now through
+			       # Alt + x myfunc
+
+
+
+
+					

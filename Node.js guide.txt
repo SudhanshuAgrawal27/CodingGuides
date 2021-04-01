@@ -1,0 +1,69 @@
+- Node.js is a JS runtime environment.
+	Usually- run JS in a browser
+	Node allows you to run it outside the browser.
+
+- Often used to write server code. 
+	Why?
+	- JS is event-driven which is perfect for server-side code
+	
+
+- Every file in Node.js is a module.
+  Modules can export functions and objects.
+
+  	//my-module.js
+	module.exports = function myFunction() 		// export the "main" function
+			{
+				console.log("hello, world")
+  			}
+
+
+	// require() imports a module into your code
+	const myModule = require("./my-module.js")
+	myModule() 	// calls myFunction - whatever was exported
+
+
+- Packages = collection of modules 
+
+  $ npm install express // express is the library 
+
+  const express = require("express")
+
+
+
+
+- Express.js is a Node.js library for writing server-side code
+
+# Building a server to order pizzas:
+
+- Create a folder 
+
+- cd to dir
+  $ npm install express cors body-parser
+
+- create index.js file
+
+To run a JS file (like a script in python):  
+  $ node index.js 
+
+
+Then we can try running a small server.
+Refer to backend-workshop code.
+
+Note, when you change your code, you need to kill and 
+restart your server to see the changes. 
+$ Ctrl + c 
+$ node index.js
+
+
+All of the methods we implement are built around HTTP
+methods like GET - access some info
+	     POST - put up some new info
+	     DELETE - get rid of some info
+	     PATCH - modify some info
+
+
+
+
+
+
+

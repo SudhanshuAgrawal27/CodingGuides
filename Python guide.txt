@@ -1,0 +1,131 @@
+$ python3			# open python 3 - just "python" usually runs python 2
+
+$ python3 filename		# running the python file
+$ python3 filename arg1 	# running the python file with cmd line args
+
+
+
+immutable types - int, float, bool, tuple, string      # the value itself exists and is defined - cannot change
+mutable types - dict, list,  set 
+
+
+Casting between structures : list() set() 
+Lists:
+A[0]          			# indexing 
+A.append(5)   			# appending
+
+Tuple:
+A[0] 	      			# can index
+	      			# cannot be modified
+
+
+Dict:
+
+D = {"key1":val1, "key2":val2}      		# classic way 
+D = dict([("key1", "val1"), ("key2", "val2")])  # casting a list of tuples 
+D = dict
+
+
+Set:
+
+S = {1, 2, 3}
+
+Only one of each value
+No specific ordering
+O(1) in
+
+
+
+Conditionals:
+or, and , not 					# all written out
+
+
+
+range() generates an immutable sequence type    # about range
+
+
+Python objects are passed by object reference.  # pass by??
+
+
+Classes: 
+class classname:
+	def __init__(self, args):		# constructor 
+		self.classvar1 = val 
+		
+	def my_func(self, args):
+		self.classvar1 = 2*self.classvar1 
+
+
+	 					# defining a class
+Every function should have func(self, otherargs)
+Every class should start with a __init__(self, otherargs) which acts like a constructor 
+When referencing an instance variable (field), you refer to it by self.varname
+
+CLASS 
+	INIT SELF SELF
+
+
+# Argument Parser:
+from argparse import ArgumentParser
+
+# instantiate
+parser = ArgumentParser()		
+
+
+# adding an argument	      
+parser.add_argument("-n",   				# short form
+		   "nameOfArgument", 			# full name
+            	    nargs='?', 				# number of args
+		    default = None,			# default value if nothing passed
+		    help="A description")		# accessed by cmd --help
+
+# default 
+nice to keep 
+	default = None 
+to see whether an arg was passed at all
+
+
+# number of values to be accepted per argument
+nargs: 
+	nargs = 4		# expects 4 arguments, puts them in a list
+	nargs = '?'		# 0 or 1 argument. if no arg, default value. used for opt args
+	nargs = "*"		# places all arguments into a list
+	nargs = "+"		# like "*", but requires atleast one cmd line arg to have been passed
+
+
+# action 
+action = 'store_true'
+
+The value of the argument will be set to true if the option was passed
+and default if not, or false if no default is set.
+
+Ex. shuf -r testfile	# -r takes in no args, just an option - a 0 or 1 state.
+
+
+# read in the arguments
+args = parser.parse_args()		# at this point in the code, read in the input
+
+# accessing the arguments 
+args.argname 
+Ex.	args.filename
+
+
+# dictionary form of args 
+vars(args)
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+

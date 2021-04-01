@@ -1,0 +1,63 @@
+
+
+
+$ conda -v 		 			# version of conda (also to make sure it's in the PATH)
+
+$ conda upate conda 				# update conda 
+
+$ conda search "^python$"   			# search for available versions of python
+
+$ conda create -n ENVNAME python=3.8.5  	# create env with python version specified
+
+$ conda env list 				# list of environments 
+
+$ conda activate ENVNAME			# activate an env
+
+$ conda deactivate				# deactivate current env
+
+$ conda deactivate 				# removing an environment
+  conda env remove -n ENVNAME			
+
+$ conda install python=2.7.5			# change python version in env
+
+$ conda list 					# list of packages in current environment
+
+
+$ conda install -c CHANNEL_NAME  PACKAGE_NAME	# install package from channel(the "repo" from which you install it)
+						# if no -c specified, checks some default channels
+
+
+	$ conda install -c conda-forge notebook
+	$ conda install -c conda-forge numpy
+	$ conda install -c conda-forge pytorch			# note, use upto python 3.8.5
+	$ conda install -c conda-forge matplotlib 
+ 	$ conda install -c conda-forge scipy
+	$ conda install -c pytorch torchvision	
+	$ conda install -c conda-forge scikit-learn
+
+
+
+$ conda remove -n ENV_NAME PACKAGE_NAME		# remove package from environment
+
+
+
+
+RUNNING PYTORCH ON A LOCAL GPU
+1. Install CUDA Toolkit (10.2 definitely works)
+2. download cuDNN (the appropriate version for the toolkit)
+3. copy files INSIDE cuDNN/lib, cuDNN/bin, cuDNN/include to the corresponding folders in C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.2\FOLDER_NAME
+4. Google "Install Nvidia Driver for GPU" - download the appropriate drivers for your version - can be checked by going to display manager->nvidia gpu
+5. Make sure CUDA is in your system path (https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html)
+6. On conda, activate your environment, then install the versions of the packages that have GPU support (these will be much larger)
+       conda install pytorch torchvision torchaudio cudatoolkit=10.2 -c pytorch
+
+
+7. start up your jupyter notebook
+   Use the following to set (and check) your device
+	if torch.cuda.is_available():
+    		device = torch.device('cuda:0')
+    		print('Running on GPU')
+    		print(torch.cuda.get_device_name(0))
+	else:
+   	 	device = torch.device('cpu')
+    		print('Running on CPU')

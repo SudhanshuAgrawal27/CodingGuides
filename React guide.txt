@@ -1,0 +1,146 @@
+1. Installing Node.js
+https://nodejs.org/en/download/
+
+2. make directory tic-tac-toe
+
+3. In cmd,
+	 cd tic-tac-toe
+
+4. creating react app
+   In cmd, 
+	 npm install react
+	 npx create-react-app tic-tac-toe 
+
+5. cd tic-tac-toe 
+
+
+6. starting the react-app - get the url 
+   In cmd, 
+	 cd tic-tac-toe
+	 npm start
+
+7. deleting all files inside the directory src
+   In cmd, 
+	del *
+
+
+The fundamental unit of a react app is called a React.Component
+It's a bit of code (class) that all components will inherit.
+
+class myComponent extends React.Component
+{
+	render()
+	{
+	}
+
+}
+
+Creating your component to be used 
+<myComponent />				# an html node without children
+
+<myComponent name="comp1" 		# note, no commas
+	     id = 12345	
+ />
+
+
+arguments are passed by key value through the object 
+
+they are stored in the dictionary - props "properties"
+you can refer to the args within the function using 
+	this.props.name 
+this.props = properties PASSED IN when calling the object.
+
+
+
+Another fundamental bit of code is the render() function. 
+render returns a React element which is a description of what to render. 
+These structures are written in JSX, a type of syntax which combines
+HTML and JS.
+
+render()
+{
+	return( HTML STRUCTURE );
+}
+
+Inside render,
+
+When referring to variables in JSX, use { varname }
+
+
+You can name your DOM components.
+the className parameter will link to your CSS file
+so you can group all those components in one style
+
+<button className="button">
+	this text is inside the button
+</button>
+
+
+
+IMPORTANT: Every component has a state
+state is how you remember things you've done.
+
+Adding the state: 
+
+constructor(props)  	# create a constructor
+{
+	super(props);   # must call the constructor of the super class
+
+
+			# create a state object
+	this.state = { value1: null, 
+	       	       value2: null,
+	     	     };
+
+}
+	
+Accessing state: 
+	this.state.value1
+
+the state is private to the object.
+
+
+To create an interactive component which works by clicking,
+	<button onClick={ () => #what happens when you click#}
+
+This is like julia how you define a function anonymously, 
+which takes no arguments and produces some action
+
+
+onClick needs to be set to some function.
+We can either define it as an anonymous function using the () => {statement}
+syntax, or directly pass in a function like 
+	onClick = {this.props.someFunc}
+
+
+
+If you want to change the state when you click, 
+	<button onClick={ () => this.setState({value1: 1, value2: 2})} >
+
+
+When this.setState() is called, React re-renders the given component,
+and also any child components
+
+
+
+Creating an array: 
+	Array(10).fill(0) 
+
+
+If something doesn't have a state, and just has a render(), 
+define it as a function component which takes props as an argument.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,724 @@
+If you're trying to use VSCode to run C++, 
+
+you need to firstly make sure that you open vscode using developer tools for vs
+
+search for "Developer Command Prompt for Visual Studio"
+type  $ cl 
+should give some options
+
+cd to your project directory
+$ code .
+
+this opens vscode from developer tools thus setting the cli to the developer cli. 
+
+then use Ctrl+P search for "Configure default build task" 
+	choose cl.exe 
+
+
+then replace "${file}" with   "${workspaceFolder}\\*.cpp"  this ensures that all cpp files are built
+
+you can also replace the executable name with "${workspaceFolder}\\${workspaceFolderBasename}.exe" 
+	which means that the .exe will have the name of the project directory. 
+
+
+then you can use Ctrl + Shift + B to build the program.
+
+then you can use $ program.exe  to actually run it. 
+
+
+
+
+1. 
+
+if we have a class which has a non-primitive object as a member, 
+class A
+{
+	public: 
+		..
+
+	private: 
+		someOtherClass obj; 
+};
+
+then during construction, we build INSIDE OUT. 
+like building a car, engine first, then exterior 
+
+the constructor of the outer class may also have to be modified 
+if the constructor of the inner class requires arguments 
+
+A(int a, int b)
+ 	: someOtherClass(a) 
+{
+
+
+}
+
+
+during destruction, we go outside to inside. 
+like destroying a car. 
+
+
+
+
+2. include guards are placed in the header file
+#ifndef CLASSNAME_H 
+#define CLASSNAME_H 
+
+...
+
+#endif
+
+
+
+
+
+3. if two classes "depend" on each other 
+
+what you can do is 
+// inside A.h 
+class B;		// this tells the compiler that there's a class called B
+
+class A
+{
+
+	private: 
+		B* myB;
+}
+
+
+// inside A.cpp 
+#include "B.h"
+
+
+
+Basically, whenever you just need the name of the class (no methods, no data), you can use
+"class B; " at the start of your header file 
+But when you need to use its methods etc, you need the full #include "B.h" (wherever you're using them)
+
+
+
+4. default arguments can be passed into functions almost exactly like you'd expect 
+ 
+void myfunc(int a, int b = 10)
+{
+}
+
+but note, if the j'th arg has a default value, all the j+1, j+2, .... args must also have default values
+
+
+5. Pointers 
+
+int x  = 5 
+int *ptr = &x	     // & operator creates a pointer (&x = address of x)
+
+(*ptr)++	     // de-reference a pointer using *ptr 
+
+if you have a pointer to an object (instance of a class or struct)
+and you want to access the fields, 
+we have that 
+pointer->field      <=>   (*pointer).field
+
+
+
+6. Passing by reference 
+
+void myfunc(int &xx) 
+{
+	xx += 1;
+}
+
+int main()
+{
+	x = 5;
+	myfunc(x);
+}
+
+when you have a var name = &xx in the function args, 
+xx is just another name for x. they refer to the same exact memory 
+
+
+7. this is a pointer to the current object on which the function is being called 
+
+class Target
+{
+	public:
+		void printX() const;
+	private:
+		int x;
+};
+
+void Target::printX()
+{
+	cout << this->printX();
+}
+
+this is a POINTER.
+so if you want to access the fields, you need to use ->
+
+the type of this is    Target* 
+
+
+whenever you call a function of an object, you are 
+implicitly passing the value of &object  = this pointer 
+
+
+
+
+
+8. Dynamically allocate arrays (useful if we don't know the array size before compilation)
+
+int size; 
+cin >> size; 
+int *arr = new int[size];
+
+delete [] arr; 
+
+
+
+9. Copy constructor: creates a new object by copying an old one.
+
+Circ( const Cric& old)
+{
+	x = old.x;			// objects of the same class can "access" each others fields
+
+}
+
+Circ a(1); 
+Circ b(a);    // <=>    Circ b = a; 
+
+
+If no cc, C++ does a shallow copy.
+cc's are important if you have pointers to dynamically allocated memory 
+
+
+
+
+10. Assignment operator: used when we have two objects that already exist 
+			 and we want to set the value of one to the other
+
+
+
+Circ& operator=(const Circ &src) 		// returns Circ&   , name = operator=  , takes in src obj ref
+{
+	if (&src == this)			// have to check if the obj is being assigned to itself. 
+		return *this; 		
+	
+	delete [] my_dynamic_arr; 		// free memory currently held
+
+	x = src.x;				// assign new values 
+	y = src.y; 
+	..
+	
+	return *this;				// must return the object we are trying to update
+
+}
+
+why return *this  ?
+so you can do multiple assignments like this 
+circ1 = circ2 = circ3; 
+
+
+
+11. Linked Lists 
+
+struct Node
+{
+	string value;
+	Node *next;
+};
+
+
+Node *p = new Node; 
+p->value;
+
+class LinkedList
+{
+
+public: 
+	LinkedList() { } 
+	void addToFront(string val){..}
+	void addToRear(string val){..}
+	void deleteItem(string val){..}
+	bool findItem(string val){..}
+	void printItems(){..}
+	~LinkedList(){..}
+
+	
+private: 
+	Node* head;	// only need one private var
+	
+};
+
+
+
+void LinkedList::LinkedList()
+{
+	head = nullptr;
+}
+void LinkedList::printItems()
+{
+	Node *p = head; 
+	while(p != nullptr)
+	{	cout << p->value << endl;
+		p = p->next;
+	}
+}
+void LinkedList::addToFront(string v)
+{
+	Node *n  = new Node;	// create new node
+
+	n->value = v;		// assign value
+		
+	n->next = head;		// point to curr head	
+
+	head = n;		// head now points to n	
+}
+void LinkedList::addToRear(string v)
+{
+	Node *n = new Node;
+	n->value = v;
+	n->next = nullptr;
+
+	// case 1 (empty)
+	if(head == nullptr)
+	{
+		head = n;
+	}	
+	// case 2 (has nodes)
+	else
+	{
+		Node *p = head;	
+		while(p->next !=nullptr)
+			p = p->next;
+
+		p->next = n;	
+	}
+}
+void LinkedList::addItem(string val) // in a sorted list
+{
+	if (head == nullptr)		// empty 
+		this.addToFront(val);
+
+	else if (val < head->value) 	// smaller than rest
+		this.addToFront(val);
+
+	else 
+	{
+
+		Node *p = head;
+		while(p->next !=nullptr && p->next->value <=val)
+		{
+			p = p->next;
+		}
+
+		Node *n = new Node(val);
+
+		Node *t = p->next; 
+		p->next = n;
+		n->next = t;		
+	}
+}
+void LinkedList::deleteItem(string v)
+{
+	if (head == nullptr) 
+		return;
+	if (head ->value == v)
+	{
+		Node *killMe = head;
+		head = killMe->next;
+		delete killMe;
+		return;
+	}
+
+	Node *p = head;
+	while(p->next != nullptr && p->next->value != v)
+	{
+		p = p->next;
+	}
+	
+
+	Node *killMe = p->next;
+	
+	Node *n = new Node(v);
+
+	n->next = killMe->next;
+	p->next = n;
+	delete killMe;
+}
+
+
+For the conditions, just remember to always check that whatever 
+you're dereferencing isn't a null pointer. 
+
+
+
+
+12.  Stacks : Last In First Out  - Depth First Search
+
+#include <stack> 
+
+int main()
+{
+
+	std::stack<int> my_stack; 	// stack of TYPE
+
+	my_stack.push(10);
+	my_stack.top();		// look at top value 
+	my_stack.pop();		// remove top value
+	my_stack.empty(); 	
+	my_stack.size();
+}
+
+
+
+13. Queue : First In First Out  - Breadth First Search 
+
+Add items to the BACK of the queue 
+Remove items from the FRONT of the queue.
+
+#include <queue> 
+
+int main()
+{
+
+	std::queue<int> my_q; 
+	
+	my_q.push(10);
+	my_q.front();
+	my_q.pop();
+	my_q.empty();
+	my_q.size();
+}
+
+
+
+14. Inheritance: 
+
+Reuse:
+subclass will have all the public members of the super class
+it will not know the private members exist
+it will know the protected members exist
+
+
+class Student : public Person   // Student publicly declares that is is a subclass of Person
+{
+
+}
+
+Extension: 
+can add new methods to derived class not present in super class 
+
+
+Specialization of functions: 
+overriding super class methods
+
+if you intend to override a function, you must include the 'virtual' keyword before 
+the definitions in BOTH the super and sub class
+
+virtual void whatSayYou()
+{
+}
+'virtual' only needs to be included in the function defintition in the class.
+
+Also, every base class MUST have a VIRTUAL DESTRUCTOR.
+
+always use the most derived function by default 
+if you want to access super class's method, 
+	Person::whatSayYou();
+
+
+
+During construction of the derived class object, 
+the constructor of the base class is called first 
+then any data members of the derived class that are objects are constructed, 
+then finally the derived class constructor is constructed. 
+
+and like before, we can call non-default constructors using an initalizer list
+Student()
+: Person(18, "M")
+{
+
+}
+the base class must be the first item in the initializer list. 
+
+
+
+If you're defining assignment operators and/or copy constructors, 
+you need to modify them to call the base class's methods. 
+
+
+
+
+
+15. Polymorphism
+A base class pointer/reference can be used as a placeholder for any of its derived classes
+
+If a function takes in a particular class as an object, 
+as either a REFERENCE or a POINTER
+void my_func(Person &p)
+{
+	cout << p.salary();		// calls the appropriate salary() function for the class passed in
+}
+
+then not only can we pass objects of that type to the func, 
+but we can also pass objects of any type that derives that class. 
+
+my_func(person_obj);
+my_func(student_obj);
+
+
+if we don't pass a pointer or a reference, then it leads to chopping (copy constr)
+
+if you don't include the 'virtual' keyword, it just always calls the base class method. 
+
+
+-pointers: 
+Person *p = &my_student_obj; 		// base class pointer can point to derived class object 
+
+
+-will always call the most derived version as long as the previous version was virtual (overridable)
+
+
+-base class having a VIRTUAL DESTRUCTOR is important when doing polymorphism
+suppose we have a 
+Person *p = &my_student_obj; 
+
+delete p; 
+
+If the destructor is not virtual, it will just run the base class dstr since it's technically a Person obj.
+
+
+- pure virtual functions 
+	if we want a function to be implemented in all subclasses, we must define it in the base class
+	but we don't want a "dummy" implementation.  like Shape::getArea()  
+
+	so we can define it to be pure virtual 
+
+class Shape
+{
+public:
+	virtual float getArea() = 0;		// pure virtual , will never be called
+	..
+};
+
+
+Once a class has a pure virtual function, it becomes an Abstract Base Class
+it cannot be instantiated,
+
+	Shape s;		// compile error
+
+but it can still be used for polymorphism. 
+
+all derived classes must implement all pure virtual functions of the base class. 
+if it doesn't implement some pure virtual function leftover, it becomes an ABC too. 
+
+
+
+STL: 
+
+
+16. Pair:
+
+#include <utility> 
+
+pair<int, char> p1; 
+pair<int, float> p1(3, 4.5); 
+
+cout<<pair.first; 
+cout<<pair.second;
+
+
+p1 = make_pair("hello", 3); 
+
+
+can use == , != ,   < (compares first value only)
+
+
+17. List: 
+Slower traversal than a vector, but faster insertion and deletion. 
+there's no [] operator. You have to traverse. 
+
+#include <list> 
+#include <iterator>
+
+list<int> ls; 
+
+ls.assign(10, 2); 		// create a list of 10 elements, with value = 2
+
+
+for ( list<int>::iterator it = ls.begin(); it != ls.end(); it++)
+{
+	cout<< *iter <<endl;
+}
+
+ls.push_back(5); 
+ls.push_front(3);
+
+ls.front();		// first value 
+ls.back(); 
+
+ls.pop_front();  	// just removes, does not return 
+ls.pop_back(); 		
+
+ls.reverse();	 	// reverses in place
+ls.sort(); 		// sorts inplace
+
+ls.size(); 
+
+ls.clear(); 
+
+ls.insert(iter, 55); 		// must insert using iterator position 
+ls.erase(iter); 		// removes one element at that pos 
+
+
+
+
+18. Deque: 
+
+#incldue <deque> 
+
+deque<int> q; 
+
+q.assign(3, 34); 
+
+q.front();
+q.back(); 
+q.push_back(10); 
+q.push_front(5); 
+
+q.size(); 
+
+deque<int>::iterator it; 
+
+for(it = q.begin(); it != q.end(); it++)
+	cout<< *it << endl;
+
+
+
+
+
+19. Set: 
+Each element is unique. Value of an element cannot be modified. 
+
+set<int> s; 
+
+s.insert(5); 
+s.insert(10); 	// can just insert into set cuz order is internal 
+
+s.erase(10); 	// removes element with value 10. (unique)
+
+
+set<int>::iterator it; 
+for(it = s.begin(); it != s.end(); it++)
+	cout<< *it << endl; 
+
+
+
+
+20. Map: 
+Associates keys with values (dicts in python)
+
+#include <map> 
+map<string, int> m; 
+
+// you must insert PAIRS into maps. 
+
+m.insert(pair<string, int>("a", 1)); 
+m.insert(pair<string, int>("b", 2));
+
+m.erase("a"); 	// erase by key
+
+
+m["a"]  = 5;	// like a normal dict (will insert if not present)
+
+
+for(map<string, int>::iterator it = m.begin(); it != m.end(); it++)
+	cout<< it->first << it->second << endl; 		// note, the iterator points to the pairs
+
+
+
+21. Vector 
+Same as dynamic arrays - can be resized 
+Inserting and erasing takes linear time (except for popping the last element = const time) 
+
+
+vector<int> v; 
+
+v.assign(10, 2); 
+
+v.push_back(-1); 
+
+for(int i = 0; i< v.size(); i++)
+	cout<< v[i]<<endl; 
+
+
+vector<int>::iterator iter; 
+
+for(iter = v.begin(); iter != v.end(); ++iter)
+{	
+	if(*iter == 5) 
+		v.insert(iter, -1); 		// insert must be done at iterator pos   
+}
+ 
+
+
+
+NOTE: for all containers, assignment is safe 
+
+vector<int> v1; 
+v1.assign(10, 0); 
+v2  = v1; 
+
+
+
+
+
+
+22. Substring 
+
+string.substr(start_index, number of letters);
+
+
+
+23. Extracting words from a string 
+
+#include <bits/stdc++.h>
+
+stringstream ss(str);
+string word; 
+
+while (s >> word)
+	cout << word <<endl; 
+
+
+
+24. Reading from a file 
+
+#include <iostream>
+#include <fstream> 
+#include <string> 
+
+ifstream file("file.txt"); 	// open a file for reading 
+
+while(getline(file, line))
+{
+	cout << line << endl;
+}
+
+file.close();
+
+
+
+
+25. Creating and writing to a file 
+#include <iostream> 
+#include <fstream> 
+
+
+ofstream file("file.txt");
+
+file << "This is a line in the file \n"; 
+
+file.close(); 
+
+

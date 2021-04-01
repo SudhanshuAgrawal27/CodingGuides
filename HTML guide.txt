@@ -1,0 +1,12 @@
+<div> </div> Allows you to put text in a named section 
+	     so that you can refer to it and format it
+
+<div className = "textblock1"> hello </div>
+
+
+<ul>				Unordered list of items
+	<li> Item 1 <\li>
+ 	<li> Item 2 <\li>
+</ul>
+
+

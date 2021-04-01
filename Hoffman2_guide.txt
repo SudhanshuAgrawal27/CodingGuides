@@ -1,0 +1,173 @@
+# Tmux usage on Hoffman 2
+
+# VERY IMPORTANT THING TO KEEP IN MIND WHEN USING TMUX ON A CLUSTER #
+The tmux session exists on only one server.
+When you log into Hoffman 2 it automatically assigns you to a login node based on availability.
+Once you run tmux on that login node, that login node is the ONLY server that your tmux session exists on.
+If you logout, try logging in again, get assigned a different login node, you won't be able to find your old session.
+Solution: always login to the same node
+say we decide to always use login node 4 
+if you get assigned to some other node, ssh into login node 4
+
+[username@login# ~]$ ssh username@login4
+
+[username@login# ~]$ module load tmux 
+
+[username@login# ~]$ tmux new -s session_name 			# create new session	
+
+# While in a session (green bar should appear at the bottom of the terminal specifying session name)
+
+# While in a session 
+[username@login# ~]$ Ctrl+B + d					# detach from current session 
+
+[username@login# ~]$ tmux ls 					# list all active sessions 
+
+[username@login# ~]$ tmux a -t session_name 			# attach to session 
+
+# While in a session
+[username@login# ~]$ Ctrl+B + s					# lists all active sessions, and can switch between sessions
+								# using arrow keys or Ctrl+p / Ctrl +n and pressing Enter 
+
+
+[username@login# ~]$ tmux kill-session -t session_name		# kills specificed session 
+
+
+# While in a session 
+[username@login# ~]$ tmux kill-session				# kills current session
+
+# While in a session 
+[username@login# ~]$ Ctrl+b + %					# splits screen vertically 
+[username@login# ~]$ Ctrl+b + "					# splits screen horizontally
+[username@login# ~]$ Ctrl+b + corresponding arrow key		# switch between screens 
+[username@login# ~]$ Ctrl+d 					# closes the current screen
+
+
+
+# To run an experiment in Julia
+1) Login
+After logging in, ssh to the particular login node you decide to always uses
+[username@login# ~]$ ssh username@login4
+
+2) Load tmux
+[username@login# ~]$ module load tmux 
+ 
+3) Start a tmux session 
+[username@login# ~]$ tmux new -s sesion_1 
+
+4) Start an interactive session on Hoffman 2: 
+https://www.hoffman2.idre.ucla.edu/Using-H2/Computing/Computing.html#customizing-the-qrsh-command
+
+For Julia 1.4.2, it is important to request a node with Intel architecture (for now it doesn't seem to work on AMD)
+Also, it is important to have atleast 16GB of data.
+
+A typical command would be : 
+
+[username@login# ~]$ qrsh -l h_rt=16:00:00,h_data=16G,arch=intel-gold\*
+		     qrsh -l h_rt=72:00:00,h_data=48G,arch=intel-gold\*
+
+If you get errors such as load > slots requested (nodes are oversubscribed) this is due to multithreading and the data should be distributed across processors
+
+[username@login# ~]$ qrsh -l h_rt=16:00:00,h_data=2G,arch=intel\*,h_vmem=16G -pe shared 8
+
+
+5) Once in an interactive session, load julia 1.4.2 
+[username@n1234 ~]$ module load julia/1.4.2 
+
+6) cd to the directory in which your files are stored 
+
+7) run julia
+[username@n1234 directory_name ~]$ julia 
+
+8) activate the environment 
+julia> ] activate . 
+
+9) If necessary, install the package in the environment 
+julia> ] instantiate 
+
+10) when trying to plot using GR backend we need to specify the output device then use savefig command to save plots
+    run this command before running julia> using Plots
+julia> ENV["GKSwstype"]="100"
+
+10) If something doesn't load properly try building it again 
+julia> ] build Flux
+
+11) run the driver file 
+julia> include("runMLExperiment.jl") 
+
+12) If errors such as "Segmentation fault" occur, it's probably because enough memory hasn't been requested
+    (16GB should be enough, may be able to do with less depending on the problem)
+
+13) once it runs, detach from the session
+Ctrl+b + d
+
+14) logout 
+
+15) login 
+[username@login# ~]$ ssh username@login4
+
+16) Reload tmux module
+[username@login# ~]$ module load tmux 
+
+17) attach to last session
+[username@login# ~]$ tmux attach
+
+
+
+
+Submitting a job on the cluster: Useful if you don't want to start an interactive session or if you've managed to get permission to run for a longer time (e.g. 3 days)
+
+Jobs are most conveniently submitted using a script
+Below is a script to submit a job running Julia.
+It has been adapted from: 	 https://www.hoffman2.idre.ucla.edu/Using-H2/Computing/Computing.html#how-to-build-a-submission-script   
+to be able to run julia 1.4.2
+
+Note, the commands with a leading #$ are by design. It is how the compiler recognizes them. #$ = command, # = comment entry
+
+### job1_submit.sh START ###
+#!/bin/bash
+#$ -cwd
+# error = Merged with joblog
+#$ -o joblog.$JOB_ID
+#$ -j y
+# Edit the line below to request the appropriate runtime and memory
+# (or to add any other resource) as needed:
+#$ -l h_rt=00:10:00,h_data=16G,arch=intel-gold*
+# Email address to notify
+#$ -M $sudhanshu.agrawal@ucla.edu
+# Notify when
+#$ -m bea
+
+# echo job info on joblog:
+echo "Job has started "
+
+# load the job environment:
+. /u/local/Modules/default/init/bash
+module load julia/1.4.2
+
+# substitute the julia-script.jl with your actual julia script
+# in the two lines below:
+echo 'julia test.jl'
+julia /u/home/s/sudhansh/nonlocalmfg/test.jl
+
+# echo job info on joblog:
+echo "Job has ended "
+### job1_submit.sh STOP ###
+
+
+1) Important! If you edited this file on your local computer and then transferred to linux, you need to run dos2unix
+[username@login# ~]$	dos2unix job1_submit.sh
+
+1) To submit the job (in the terminal)
+[username@login# ~]$	chmod u+x job1_submit.sh
+[username@login# ~]$	qsub job1_submit.sh
+
+
+2) Monitoring the job once it's submitted (you should get emails as well if you included the "-m bea" command in the submission script)
+[username@login# ~]$	myjobs
+
+
+3) Deleting the job
+[username@login# ~]$	qdel JOBID
+
+Other useful commands and descriptions found here: https://www.ccn.ucla.edu/wiki/index.php/Hoffman2:Monitoring_Jobs
+
