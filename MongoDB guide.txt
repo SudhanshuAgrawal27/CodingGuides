@@ -1,0 +1,16 @@
+1. Create a MongoDB account 
+2. Access Atlas, which allows you to make clusters
+3. Follow the steps given by Atlas to create your cluster 
+4. Add details about IP addresses, user accesses etc. 
+5. In the local directory, 
+   $ npm install mongodb@3.6.3			# note there's a bug with 3.6.4
+  
+
+6. import mdb
+   const {MongoClient} = require('mongodb')
+
+
+PWD: aQDJZTTc6CO5Htrb
+
+
+7. create a main() 
