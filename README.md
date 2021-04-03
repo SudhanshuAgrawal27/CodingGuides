@@ -8,4 +8,4 @@ Since this is a recent project, the guides for the tools that I've learnt in the
 The purpose of placing everything in .txt files is that I wanted a simple, no-nonsense way of quickly writing down large amounts of syntax across various languages without any additional frills, so that I could reference and modify them easily whenever I needed to. 
 
 
-- Sudhanshu
+\- Sudhanshu
