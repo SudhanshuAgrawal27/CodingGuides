@@ -6,3 +6,6 @@ This repository has been a recent project of mine (as of April 4th, 2021). Every
 Since this is a recent project, the guides for the tools that I've learnt in the past have lesser content and I will gradually add more content to them as well. 
 
 The purpose of placing everything in .txt files is that I wanted a simple, no-nonsense way of quickly writing down large amounts of syntax across various languages without any additional frills, so that I could reference and modify them easily whenever I needed to. 
+
+
+- Sudhanshu
