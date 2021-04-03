@@ -1,0 +1,143 @@
+R guide: 
+
+
+In RStudio, 
+Ctrl + Enter executes code in a file (like Julia+Atom/Jupyter uses Shift+Enter)
+
+Declaring variables : 
+
+x <- 2 
+
+
+# Comment entries (Python style)
+
+
+Vectors (like numpy arrays/julia vectors): 
+
+v <- c(1, 2, 3, 4, 5)
+
+c(...) is the constructor to create a vector 
+
+
+Broadcasting : 
+Completely implicit (feels like numpy) 
+ 
+x <- c(1, 2, 3, 4, 5)
+y <- c(2, 3, 4, 5, 6)
+
+x/y 
+
+(x-y)^2 		# note the julia style of taking powers 
+
+
+	
+
+Plotting: 
+# where x, y are vectors 
+
+plot(x, y)		# scatter plot
+lines(x, y)		# line plot 
+
+dev.off(dev.list()["RStudioGD"])		# clears all plots
+
+
+
+NULL is the default value (as compared to None (py), NULL(C))
+
+
+
+T == TRUE == !F == !FALSE   # pls standardize this 
+
+'a' == "a"      # python style 
+
+
+
+print("HELLO") 
+->    "HELLO"
+cat("HELLO")
+->     HELLO 
+
+cat prints out the contents like linux
+
+MOREOVER, 
+print("The value of x = ", x) 	# DOES NOT WORK 
+cat("The value of x = ", x)	# WILL WORK 
+
+
+
+NA = missing value 
+
+
+
+Type of data: 
+is(x) 		# what is x?
+
+
+
+Installing packages: 
+install.packages("pkgname")
+find.package("name of pkg")		# where installed - use to verify 
+library(name of pkg without quotes) 	# import it
+
+
+
+
+
+R markdown: 
+ALlows you to integrate text, pictures, code 
+File -> New File -> new R markdown file 
+Choose type 
+Knit 
+
+
+Code blocks in Rmd
+```{r divName}
+	# the code you put here will be executed in a NEW state for Rmd 
+	# so if you want to print out some values, 
+	# you have to have declared them previously in Rmd.
+	ages = c(18, 19, 20)
+	print(ages)
+```
+
+if you want to show the code block without executing, 
+```{r eval=FALSE}
+	# code block
+```
+
+if you want to show the code block, and execute it, but not show the output (l
+```{r load_mosaic, echo=T, results='hide', message=F, warning=F} 
+library(mosaic)
+find("mosaic")
+```
+
+cbind: 
+cbind(vector1, vector2) 		# concatenates v1, v2 as columns to produce a matrix
+					# vectors of different types are cast to type with highest precedence. 
+
+
+
+Reading in data: 
+
+setwd(Dir where file is)
+data = read.csv(file = "filename.csv")
+produces a data.frame object 
+
+
+Viewing data: 
+View(data)		# displays it in a nice way
+
+
+str(data) 		# gives you info about data		pd.info(df)
+
+
+In R, a dataframe is a set of LISTS  (like pd Series), each associated with some name
+
+data&ages		# extracts the VALUES in the ages list as a vector 
+data["ages"]		# extracts the ages list itself   - 	the series 
+
+
+data[1:5, "Visits"] 	# [rows, columns]
+
+
+
+

@@ -10,7 +10,4 @@
    const {MongoClient} = require('mongodb')
 
 
-PWD: aQDJZTTc6CO5Htrb
-
-
 7. create a main() 
