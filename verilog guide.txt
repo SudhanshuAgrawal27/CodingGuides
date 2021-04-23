@@ -1,0 +1,45 @@
+To open a project, open 
+	*.xise 
+
+
+(wire <> assign combo)
+
+wire my_out; 
+assign my_out = (sw[0] & sw[1]); 	// assign is dynamic, keeps checking the value of 		
+					// sw[0] and sw[1] and assigns the value to wire my_out
+
+
+assign MuXIn = {o1, o2, o3};
+
+assign SelectInt = sw[4:2];		// 4,3,2   - 3 bit code 
+
+always @(MuxIn, SelectIn)		// means whenever muxin or selectin changes.
+	led = MuxIn[SelectIn];
+	
+
+
+always @(posedge clk)
+..
+
+
+
+ucf file is required when you want to use something physical and board specific - switches, leds, etc
+
+testbench: 
+
+module my_module_tb;
+
+my_module test_module( .a0(a0), .a1(a1));   // creates instance mapped to some names
+
+reg a0; 
+reg a1; 
+
+initial begin
+	# 5 a0 <= 1'b1; 		# after 5 ns, set a0 to 1  - happens just once btw 
+	# 10 a1 <= 1'b0; 
+end 
+
+always #10 clk = ~clk; 			# increment the clock every 10 ns using always
+
+endmodule 
+	

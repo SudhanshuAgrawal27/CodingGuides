@@ -27,28 +27,48 @@ $ conda install -c CHANNEL_NAME  PACKAGE_NAME	# install package from channel(the
 						# if no -c specified, checks some default channels
 
 
+
+
 	$ conda install -c conda-forge notebook
 	$ conda install -c conda-forge numpy
-	$ conda install -c conda-forge pytorch			# note, use upto python 3.8.5
+	$ conda install -c conda-forge pytorch			# note, use upto python 3.8.5  , for GPU see below 
 	$ conda install -c conda-forge matplotlib 
  	$ conda install -c conda-forge scipy
 	$ conda install -c pytorch torchvision	
 	$ conda install -c conda-forge scikit-learn
+	$ conda install -c conda-forge pandas
+
+`` 
+conda install -c conda-forge notebook
+y
+conda install -c conda-forge scikit-learn
+y
+conda install -c conda-forge pandas
+y
+conda install -c conda-forge matplotlib
+y
+conda install -c conda-forge seaborn 
+y
+conda install -c conda-forge scipy
+y
 
 
+``
 
 $ conda remove -n ENV_NAME PACKAGE_NAME		# remove package from environment
 
 
 
 
-RUNNING PYTORCH ON A LOCAL GPU
+RUNNING PYTORCH ON A LOCAL GPU: 
+
 1. Install CUDA Toolkit (10.2 definitely works)
 2. download cuDNN (the appropriate version for the toolkit)
 3. copy files INSIDE cuDNN/lib, cuDNN/bin, cuDNN/include to the corresponding folders in C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.2\FOLDER_NAME
 4. Google "Install Nvidia Driver for GPU" - download the appropriate drivers for your version - can be checked by going to display manager->nvidia gpu
 5. Make sure CUDA is in your system path (https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html)
 6. On conda, activate your environment, then install the versions of the packages that have GPU support (these will be much larger)
+
        conda install pytorch torchvision torchaudio cudatoolkit=10.2 -c pytorch
 
 
