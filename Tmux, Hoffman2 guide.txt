@@ -90,6 +90,9 @@ julia> ENV["GKSwstype"]="100"
 
 10) If something doesn't load properly try building it again 
 julia> ] build Flux
+For Plots.jl in particular (gives .so shared file error)
+try rebuilding 
+try updating 
 
 11) run the driver file 
 julia> include("runMLExperiment.jl") 
