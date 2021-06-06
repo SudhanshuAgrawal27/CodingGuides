@@ -132,11 +132,69 @@ str(data) 		# gives you info about data		pd.info(df)
 
 In R, a dataframe is a set of LISTS  (like pd Series), each associated with some name
 
-data&ages		# extracts the VALUES in the ages list as a vector 
+data$ages		# extracts the VALUES in the ages list as a vector 
 data["ages"]		# extracts the ages list itself   - 	the series 
 
 
 data[1:5, "Visits"] 	# [rows, columns]
+
+
+
+EDA: 
+
+
+Similar to pandas, not as powerful imo
+
+remember that pandas likes [' '], and that R likes $ 
+
+so if we want the copper values for the entires in the table that have region = north, 
+
+north_copper = data$copper[data$Region == 'North']
+
+		in pandas I'd do : data[data['Region'] == 'North']['copper'] 
+
+
+like pandas, data$Region == 'North' produces a vector with T/F 
+note, R is more picky about vectors vs lists (series) that pandas is 
+so if [] doesn't work, $ will likely work. 
+
+
+NOTE: the above works only for VECTORS (1D)
+
+let's say we want all the entries in the dataframe such that region = north, 
+
+north_region  = data[data$region == 'North, ]  # NOTE THE USE OF THE COMMA !!!!!!!!!
+
+# IT WILL GIVE A WEIRD ERROR WITHOUT THE COMMA 
+
+
+
+
+Probability: 
+
+Each distribution has a family of functions 
+	
+Prefix Name of Distr 
+
+PRefix: 
+	r : random - create  random sample from the distrib 
+	d : density - want the height at a certain point - probability of a sample in that distrib
+
+	p : area under the curve to the left of the value you input in the function (cumulative prob)
+	q : quantile - input a cumulative probability (like 0.80), tells you the value or z score that gives you that 
+			cumulative probability 
+
+
+Distrib: 
+	unif 
+	norm
+	binom 
+
+
+
+
+
+
 
 
 
