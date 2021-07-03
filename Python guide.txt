@@ -1,131 +1,438 @@
-$ python3			# open python 3 - just "python" usually runs python 2
+Python guide: 
+			  This guide assumes you've used Python a fair amount before.
 
-$ python3 filename		# running the python file
-$ python3 filename arg1 	# running the python file with cmd line args
+			  The use case is if you've been coding in a different language for a while and suddenly need to use Python again, 
+			  you can refer to this guide to refresh your knowledge of Python, while mainly focusing on its idiosyncrasies. 
 
+			  It also contains some good notes on classes and inheritance which should clear up the inevitable confusion one faces when trying to do OOP in Python. 
 
-
-immutable types - int, float, bool, tuple, string      # the value itself exists and is defined - cannot change
-mutable types - dict, list,  set 
-
-
-Casting between structures : list() set() 
-Lists:
-A[0]          			# indexing 
-A.append(5)   			# appending
-
-Tuple:
-A[0] 	      			# can index
-	      			# cannot be modified
-
-
-Dict:
-
-D = {"key1":val1, "key2":val2}      		# classic way 
-D = dict([("key1", "val1"), ("key2", "val2")])  # casting a list of tuples 
-D = dict
-
-
-Set:
-
-S = {1, 2, 3}
-
-Only one of each value
-No specific ordering
-O(1) in
+			  There's also a section on Python's ArgumentParser which should be simpler to understand than the huge doc page. 
 
 
 
-Conditionals:
-or, and , not 					# all written out
+
+1. blocks are demarcated by :  
+		like this 
+
+	if x > 5: 
+		print(x)
+
+	general rule for every spot you'd expect to have a {   } in C++, 
+	including functions, loops, classes, etc. 
 
 
+2. Scopes: 
 
-range() generates an immutable sequence type    # about range
+	a. By default everything is in the global scope.
 
+	b. Loops DO NOT have their own scope. Variables defined in loops 'leak' into the surrounding scope. 
 
-Python objects are passed by object reference.  # pass by??
-
-
-Classes: 
-class classname:
-	def __init__(self, args):		# constructor 
-		self.classvar1 = val 
+		for i in range(5): 
+			x = -1 
+			print(i) 
 		
-	def my_func(self, args):
-		self.classvar1 = 2*self.classvar1 
+		print(x)  # will print -1 
 
-
-	 					# defining a class
-Every function should have func(self, otherargs)
-Every class should start with a __init__(self, otherargs) which acts like a constructor 
-When referencing an instance variable (field), you refer to it by self.varname
-
-CLASS 
-	INIT SELF SELF
-
-
-# Argument Parser:
-from argparse import ArgumentParser
-
-# instantiate
-parser = ArgumentParser()		
-
-
-# adding an argument	      
-parser.add_argument("-n",   				# short form
-		   "nameOfArgument", 			# full name
-            	    nargs='?', 				# number of args
-		    default = None,			# default value if nothing passed
-		    help="A description")		# accessed by cmd --help
-
-# default 
-nice to keep 
-	default = None 
-to see whether an arg was passed at all
-
-
-# number of values to be accepted per argument
-nargs: 
-	nargs = 4		# expects 4 arguments, puts them in a list
-	nargs = '?'		# 0 or 1 argument. if no arg, default value. used for opt args
-	nargs = "*"		# places all arguments into a list
-	nargs = "+"		# like "*", but requires atleast one cmd line arg to have been passed
-
-
-# action 
-action = 'store_true'
-
-The value of the argument will be set to true if the option was passed
-and default if not, or false if no default is set.
-
-Ex. shuf -r testfile	# -r takes in no args, just an option - a 0 or 1 state.
-
-
-# read in the arguments
-args = parser.parse_args()		# at this point in the code, read in the input
-
-# accessing the arguments 
-args.argname 
-Ex.	args.filename
-
-
-# dictionary form of args 
-vars(args)
+	c. On the other hand, as expected, if you define a variable in a function, it will belong only to that scope. 
 
 
 
+3. Indexing 
 
+	a. General rule - include first index, exclude last index.
+
+		[i : j : step_size] 	gives you all elements from [i, j) with step = step_size
+
+		my_list = [0, 1, 2, 3, 4] 
+
+		my_list[2:4]   #  this is [2, 3]
+
+	b. Empty colon notation 
+
+		my_list[2:]    # all elements starting at 2 till end 
+
+		my_list[::2]   # only alternate elements 
+
+
+	c. Python allows negative indexing which is really useful when you want to access the last element of a list. 
+
+		my_list = [1, 2, 3, 4]
+
+		my_list[-1]		# number 4 
+
+
+		It also allows negative step sizes which can instantly reverse a list 
+
+		my_list[::-1]  # reverse the list 
+
+		NOTE: if you want to use a negative step size, the i, j values need to be reversed too 
+				my_list[5:0:-1]  # will work 
+				my_list[0:5:-1]  # will not work
+		
+
+
+4.	Logic  
+
+	For some strange reason, every language has a different way of writing true and false. 
+
+	Python : True , False 
+	Julia  : true, false 
+	C++    : true, false 
+	R      : TRUE, FALSE  or T/F  
+
+
+	also, logical operators are written out 
+		if (x > 5 and x < 10) or (x == -1): 
+			print(x) 
+
+
+	'is'    operator 
+		checks whether two objects point to the same location of memory 
+
+		it's like   &x == &y rather than x == y 
+
+		x = [1, 2, 3]
+		y = [1, 2, 3]
+
+		x == y   		: True 
+		x is y 			: False
+
+
+
+	'in'	operator 
+		bread and butter for loops 
+		
+		pretty powerful 
+
+		for c in "Hello"
+			print(c)
+
+		can check if something is contained in pretty much any iterable 
+			strings, lists, tuples, ranges, dictionaries
+
+
+5.  Inserting variables in strings (really annoying imo)
+
+	my_string = "Hello my name is {},  my age is {} ".format(Sudhanshu, 19)
+
+	you can also add formatting to the {} like other languages 
+
+
+
+6. List comprehension <3
+
+	Keep set-builder notation from math in mind 
+		even_numbers = [i for i in range(1, 10, 2)]
+
+	it's also faster than a normal for loop
+
+	if you want to make a list of zeros, you need to use this (unless you're using numpy) 
+		initial_values = [0 for _ in range(10)] 
+
+	
+	you can also add conditions like set builder notation 
+
+	[VALUE for x in ITERATOR if CONDITION]  # put the condition at the end otherwise 
+											# you'll get an error about a missing else
+
+	x = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+	[ t for t in x if t%2 == 0 ]
 	
 
 
+7. Dictionaries  <3 
+
+	Probably my favourite data structure. 
+		O(1) access 
+		Also really makes everything clear cuz it gives you labels for your data
+
+	
+	a. Creating one directly 
+
+	my_dict = {"apple":1, "banana":2, "orange":3}   # {KEY: VALUE, KEY: VALUE}
+	my_dict["banana"]
+
+
+	b. Dictionary comprehension 
+	
+	my_cubes = { x : x**3  for x in range(10) } 
 
 
 
+	c. Remember that iterating over a dict using 'in' will return the keys only
+
+	for k in my_dict: 
+		print(k)  			// apple, banana, orange 
+
+
+	d. useful commands :   my_dict.keys(), my_dict.values() 
+
+
+	e. Empty dictionary : 
+		my_dict = {}
 
 
 
+8.  Sets 
+
+	Really useful if you don't care about order and want to use 'in' on it a lot 
+	O(1) 'in' 
+
+	my_set = {1, 2, 3} 
+
+	NOTE: if want to make an empty set, you can't do my_set = {} - this creates an empty dictionary
+
+	You have to use: 
+		my_set = set() 
+
+	
+9. Classes 
+
+	class Rectangle: 	
+		breadth = 5 
+		length = 10
+
+	
+	# CREATING AN OBJECT 
+
+	obj = Rectangle()     	# note the () even if there are no arguments 
+							# just so you don't forget, in C++ you'd do    Target t; 
 
 
+	# ACCESSING INSTANCE VARIABLES 
+
+	obj.breadth 
+	
+
+	# ALL FUNCTIONS MUST TAKE 'self' as the first argument 
+
+	def area(self): 
+		return breadth*length 
+	
+	obj.area() 
+
+
+	# CONSTRUCTOR 
+
+	def __init__(self, breadth, length) 
+		self.breadth = breadth   			# if you're creating an instance variable you NEED to make 
+		self.length = length 				# it an attribute of self. Otherwise it's just a local variable
+
+	
+	obj = Rectangle(100, 20) 
+
+	Note: you can create instance variables (fields) in two ways 
+
+		  class myclass: 
+		  
+		  	field1 = 5 				# easy way
+
+			def __init__(self, f2):
+
+				self.field2 = f2     # using a constructor
+
+	You don't need an __init__ function unless you want to pass something in (or cuz of inheritance)
+
+
+	# INHERITANCE 
+
+	class subclass(superclass):      # NOTE:  THE PARENTHESES AFTER THE FUNCTION NAME ARE MEANT FOR INHERITANCE NOT ARGUMENTS!!!!
+
+		x = 5 
+
+		def myfunc():
+			print(x*3) 
+
+		super().myfunc()			# super() is used to refer to the parent class
+
+
+		# VERY IMPORTANT NOTE ABOUT INHERITANCE 
+
+		# When you manually implement the constructor of the derived class, 
+		# you need to call the constructor of the super class
+		# But it works anyway?!  
+		# It might. But it won't always. 
+		# If your base class had an implemented __init__(self, x, y, z) method,
+		# then you obviously have to call the constructor. 
+		# But what if it didn't take in any arguments? 
+		#	__init__(self) 
+		#		self.x = 5
+		#		self.y = 6
+		# If you want these instance variables to be a part of your derived class, 
+		# you HAVE to call super().__init__() in the constructor of your derived class. 
+		# Basically if you are manually defining the constructor of the base class and the derived class, 
+		# you better call super().__init__() in the derived class. 
+
+
+	Notes: 
+		- all methods in classes are virtual - can be overriden 
+
+		- all instance variables are PUBLIC  
+			- by convention,  _varname   are not considered part of the API and shouldn't really be used directly - could change
+		
+		- Empty classes 
+
+			class NiceWrapper:
+				pass 
+			
+			NiceWrapper.x = 5 
+			NiceWrapper.y = 10
+
+
+10. Reading and Writing from/to Files 
+
+	file = open("myfile.txt", "r")    # r, w, a   - default = r
+									  # returns a file object 
+
+	# Good Practice - use a 'with' block - automatically closes the file 
+
+	with open("myfile.txt", "r) as file: 
+		data = file.read()
+
+
+	# Reading lines 
+
+	file.readline()   # reads a single line 
+					  # if an empty string is returned, the end of the file is reached 
+
+	if you want to loop over each line, it's simpler to use :
+
+	for line in file: 
+		print(line)
+
+
+	# Writing 
+
+	file.write("some new text") 
+
+	If you're in 'w' mode, it will overwrite the entire file 
+
+	If you're in 'a' mode, it will append immediately after - doesn't add an extra line for you
+
+
+11.  Argument Parser 
+
+
+# Argument Parser - Reading in arguments from the command line
+
+	from argparse import ArgumentParser
+
+	# instantiate
+	parser = ArgumentParser()		
+
+
+	# adding an argument	      
+	parser.add_argument("-n",   				# short form
+			"nameOfArgument", 			# full name
+						nargs='?', 				# number of args
+				default = None,			# default value if nothing passed
+				help="A description")		# accessed by cmd --help
+
+	# default 
+	nice to keep 
+		default = None 
+	to see whether an arg was passed at all
+
+
+	# number of values to be accepted per argument
+	nargs: 
+		nargs = 4		# expects 4 arguments, puts them in a list
+		nargs = '?'		# 0 or 1 argument. if no arg, default value. used for opt args
+		nargs = "*"		# places all arguments into a list
+		nargs = "+"		# like "*", but requires atleast one cmd line arg to have been passed
+
+
+	# action 
+	action = 'store_true'
+
+	The value of the argument will be set to true if the option was passed
+	and default if not, or false if no default is set.
+
+	Ex. shuf -r testfile	# -r takes in no args, just an option - a 0 or 1 state.
+
+
+	# read in the arguments
+	args = parser.parse_args()		# at this point in the code, read in the input
+
+	# accessing the arguments 
+	args.argname 
+	Ex.	args.filename
+
+	# dictionary form of args 
+	vars(args)
+
+
+x.  Miscellaneous useful commands : 
+
+	a. 	#  comment entry - python doesn't have support for multi line comments 
+
+	b. docstrings : 
+
+		def my_func():
+			''' my_func : A test function '''
+			print(5) 
+
+		help(my_func)
+
+	
+	c. type(x)    # type of the object
+
+
+	d. Random numbers (annoying in every language) 
+
+			import random 
+			random.randrange(1, 10)
+
+	e.  len(my_list) 
+
+	f. 	words = my_string.split(" ")  # split by word 
+
+		characters = my_string.split("") # split by character 
+
+	g.  // integer division 
+		6//4    # results in 1 
+
+
+	h. copy() 
+
+		x = [1, 2, 3, 4]
+		y = x 
+		x[2] = -2 
+
+		x == y  # still true cuz addresses are copied 
+
+		so you gotta use 
+
+		y = x.copy() 
+
+	g. Unpacking  
+
+		def my_func(*args): 		 # pass in how many ever arguments
+			print(args[2])  # the second argument passed in 
+
+		def my_func(**kwargs): 		# pass in how many ever arguments by keyword 
+			print(kwargs["a1"])  # the argument passed in with NAME a1 
+
+		my_func(a1 = 5, a2 = 3)
+
+	
+	h. Lambda functions - Anonymous functions 
+
+		Create a function that you can't call again, only pass to another function
+		Really useful in data science when you're doing map stuff
+
+		lambda ARGUMENTS : EXPRESSION 
+
+		lambda x : x**2 
+
+		map(lambda x: 2x+3, [1, 2, 3, 4])   
+
+
+		You can also use them to generate functions 
+
+		def func_generator(n):
+			return lambda x : n*x    		# a function that multiplies by n 
+
+		func_generator(3)(10)   # results in 30 
 
 
