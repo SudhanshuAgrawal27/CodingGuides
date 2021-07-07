@@ -1,0 +1,36 @@
+CSS = Cascading Style Sheets
+
+Can control the layout of multiple webpages at once
+Also control the layout of multiple elements on a single webpage at once.
+
+Called cascading because the style of the parent element applies to the child elements
+	if you make the color of the body text = blue, all headings, paragraphs etc will also be blue
+
+For inline CSS - refer to HTML guide 
+
+Internal CSS  - define styling for the webpage only 
+
+	In the <head> tag of the page, 
+	create a block
+	  <style> 
+
+	  </style>
+
+	which contains the CSS stuff you'd put in a .css file
+
+
+External CSS - keep the CSS stuff in another .css file 
+
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="styles.css">  
+		# include it in the html file using <link>
+		# rel = relationship between html and resource
+</head>
+<body>
+
+<p>This is a paragraph.</p>
+
+</body>
+</html> 
