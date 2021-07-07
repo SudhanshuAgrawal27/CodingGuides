@@ -1,12 +1,188 @@
+<!DOCTYPE html>    	# declares this is an html doc
+
+<html lang="en">    # start of html code
+
+<head>    # contains metadata about the document - not displayed 
+
+	<title> Document's official title </title>   
+					# required for every document - shown in the title bar
+
+<head>
+
+<body>    # contains all the visible elements of the document including headings, paragraphs, images etc
+
+	<h1>  A large heading  </h1>
+
+	<p> A paragraph </p>  
+			# a block of text, all paragraphs start on a new line and have one after them
+	
+	<p> To go to the next line, we use a <br> 
+		tag which is pretty useful </p> 
+
+</body>
+
+</html>
+
+
+-COMMENTS 
+
+<!--  This is a comment  -->
+
+
+
+All of the following go within the <body> 
+
+
+
+-HYPERLINKS:
+
+<a href="https://www.google.com"> Google </a>  # the <a> tag defines a hyperlink
+						# if there's no href, it's a placeholder for a hl
+
+
+-IMAGES:
+
+<img src="myimg.jpg" alt="an image" style="width:104px; height:142px">
+
+src = path to image or link to external image	
+alt = alternate text to display instead of image
+width and height are in pixels
+note, no closing tag
+
+
+-FORMATTING
+
+<b>   bold text </b>
+<i>   italic    </i>
+<em>  emphasized text </em>
+
+
+
+-STYLES (inline CSS)
+
+
+<tag style="property:value; property:value;">    </tag>
+
+
+<p style="color:red; font-size:60px;"> 
+	This is a red paragraph with font size 60. 
+</p>
+
+the styles here are CSS styles (with that formatting)
+this method is inline styling
+
+color
+font-size
+background-color
+font-family
+text-align  <center, right, left>
+border  <thickness <solid> color>
+
+
+-HORIZONTAL LINE
+
+<hr>
+
+like \hr in LaTeX
+
+
+-VERBATIM (but for formatting)
+
+ <pre>
+  My Bonnie lies over the ocean.
+
+  My Bonnie lies over the sea.
+
+  My Bonnie lies over the ocean.
+
+  Oh, bring back my Bonnie to me.
+</pre> 
+
+Displayed in a fixed-width font (usually Courier), and it preserves both spaces and line breaks.
+
+
+
+-TABLES
+
+Each row is defined by a <tr>   </tr>
+Each table header is defined with a <th>  </th> 
+Each table data/cell is defined with a <td> </td>
+
+<table style="width:100%">
+
+<tr>
+   <th> Column 1 title </th>
+   <th> Column 2 title </th> 
+   <th> Column 3 title </th>
+</tr>
+
+<tr>
+    <td> d11 </td>
+    <td> d12 </td> 
+    <td> d13 </td>
+</tr>
+
+</table>
+
+
+add CSS to create borders around cells
+
+table, th, td{
+	border: 1px solid black,
+	border-collapse: collapse,
+	}
+
+
+-BULLETS:
+
+<ul>				
+	<li> Item 1 <\li>
+ 	<li> Item 2 <\li>
+</ul>
+
+
+
+-BLOCKS: 
+
 <div> </div> Allows you to put text in a named section 
 	     so that you can refer to it and format it
 
 <div className = "textblock1"> hello </div>
 
 
-<ul>				Unordered list of items
-	<li> Item 1 <\li>
- 	<li> Item 2 <\li>
-</ul>
+-CLASSES 
+
+the 'class' attribute can be added to an HTML element (usually consisting of many children)
+to say that it belongs to other groups of elements 
+
+this is useful so that we can style them together, or access them together in JS.
+
+<div class="button"> 
+
+</div>
+
+if you want to style a class you do 
+
+.button{
+	color:red;
+}
 
 
+
+
+-ID 
+
+an id is unique to an HTML element 
+no other element can have the same id
+
+again, used for styling that particular element or for getting element by id in JS
+
+
+<div id="firstTable"> 
+
+</div>
+
+you can style it using 
+#firstTable{
+	border:1px solid black;
+}
