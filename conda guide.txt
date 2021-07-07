@@ -26,6 +26,19 @@ $ conda list 					# list of packages in current environment
 $ conda install -c CHANNEL_NAME  PACKAGE_NAME	# install package from channel(the "repo" from which you install it)
 						# if no -c specified, checks some default channels
 
+Important note: 
+	Certain packages are not available on conda 
+	They need to be installed with pip
+	pip and conda don't go well together
+	The conda folks recommend you first install all the conda packages, then install all the pip packages.
+	The other option is to just use pip.
+	
+
+
+$ pip install git+git://SudhanshuAgrawal27/CodingGuides.git			# installing a github repo
+
+$ conda remove -n ENV_NAME PACKAGE_NAME		# remove package from environment
+
 
 
 
@@ -55,7 +68,7 @@ y
 
 ``
 
-$ conda remove -n ENV_NAME PACKAGE_NAME		# remove package from environment
+
 
 
 
@@ -81,3 +94,21 @@ RUNNING PYTORCH ON A LOCAL GPU:
 	else:
    	 	device = torch.device('cpu')
     		print('Running on CPU')
+
+
+
+
+If you're getting the DLL missing error with some reference to NumPy while running a conda virtual environment on VSCode (very common)
+	This is because for some reason, the virtual environment is not loading properly in your miniterminal
+	i.e., when you press Ctrl + F5, it activates base conda instead of your actual virtual env
+
+	First check the bottom left hand corner and make sure the correct env is activated. 
+
+	then try opening a cmd prompt in your miniterminal (the + icon in the bottom right)
+		run 'conda activate envname'  
+
+	
+
+
+
+
