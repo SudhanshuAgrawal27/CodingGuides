@@ -24,6 +24,7 @@
 </html>
 
 
+-----------------------------------------------------------------------------------------------------------
 -COMMENTS 
 
 <!--  This is a comment  -->
@@ -32,14 +33,13 @@
 
 All of the following go within the <body> 
 
-
-
+-----------------------------------------------------------------------------------------------------------
 -HYPERLINKS:
 
 <a href="https://www.google.com"> Google </a>  # the <a> tag defines a hyperlink
 						# if there's no href, it's a placeholder for a hl
 
-
+-----------------------------------------------------------------------------------------------------------
 -IMAGES:
 
 <img src="myimg.jpg" alt="an image" style="width:104px; height:142px">
@@ -49,15 +49,14 @@ alt = alternate text to display instead of image
 width and height are in pixels
 note, no closing tag
 
-
+-----------------------------------------------------------------------------------------------------------
 -FORMATTING
 
 <b>   bold text </b>
 <i>   italic    </i>
 <em>  emphasized text </em>
 
-
-
+-----------------------------------------------------------------------------------------------------------
 -STYLES (inline CSS)
 
 
@@ -78,14 +77,14 @@ font-family
 text-align  <center, right, left>
 border  <thickness <solid> color>
 
-
+-----------------------------------------------------------------------------------------------------------
 -HORIZONTAL LINE
 
 <hr>
 
 like \hr in LaTeX
 
-
+-----------------------------------------------------------------------------------------------------------
 -VERBATIM (but for formatting)
 
  <pre>
@@ -100,8 +99,7 @@ like \hr in LaTeX
 
 Displayed in a fixed-width font (usually Courier), and it preserves both spaces and line breaks.
 
-
-
+-----------------------------------------------------------------------------------------------------------
 -TABLES
 
 Each row is defined by a <tr>   </tr>
@@ -132,7 +130,7 @@ table, th, td{
 	border-collapse: collapse,
 	}
 
-
+-----------------------------------------------------------------------------------------------------------
 -BULLETS:
 
 <ul>				
@@ -141,7 +139,7 @@ table, th, td{
 </ul>
 
 
-
+-----------------------------------------------------------------------------------------------------------
 -BLOCKS: 
 
 <div> </div> Allows you to put text in a named section 
@@ -149,7 +147,7 @@ table, th, td{
 
 <div className = "textblock1"> hello </div>
 
-
+-----------------------------------------------------------------------------------------------------------
 -CLASSES 
 
 the 'class' attribute can be added to an HTML element (usually consisting of many children)
@@ -164,12 +162,13 @@ this is useful so that we can style them together, or access them together in JS
 if you want to style a class you do 
 
 .button{
-	color:red;
+	color:red ;
+	width:100% ;
 }
 
 
 
-
+-----------------------------------------------------------------------------------------------------------
 -ID 
 
 an id is unique to an HTML element 
@@ -185,4 +184,50 @@ again, used for styling that particular element or for getting element by id in 
 you can style it using 
 #firstTable{
 	border:1px solid black;
-}
+	}
+
+
+-----------------------------------------------------------------------------------------------------------
+-FORMS
+
+<form>  
+
+The inputs to the form are denoted by a single <input> tag, with the specific type mentioned
+
+	<input type="text" id="fname" name="fname"> 
+
+
+	We specify the id of the element (useful for labelling)
+	and also the name of the form entry (useful when we're doing the server side stuff)
+
+
+	Other input types = "checkbox","submit","button"
+
+
+The label tag is used to label the input (give it the text we see).
+
+	<label for="fname"> First name: </label> 
+
+	The for attribute specifies the id of the element the label is for
+
+
+<form> 
+	<label for="fname"> First name: </label> <br> 
+	<input type="text" id="fname" name="fname"> <br>
+
+</form>
+
+
+Submit button: 
+	Submit is also a type of input <input type="submit">
+
+	It sends the form data to a form-handler (defined by you)
+	
+	This form handler is specified in the "action" attribute of the form
+
+	You can also have an onSubmit function that handles the submission (easier if you're doing server side stuff)
+
+	<form action = "/action_page"  onSubmit={handleSubmit} >
+	
+
+
