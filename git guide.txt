@@ -279,6 +279,33 @@ means add commits to <branchName> to bring it up to speed with the current branc
 
 
 
+Adding the SSH keys of your git account to your computer (essentially allow your computer to be as good as if you're logged in to your git account)
+
+In GitBash
+
+1) generate a new ssh key  using ssh-keygen    
+https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
+
+
+	$ ssh-keygen -t ed25519 -C "youremail"  
+
+
+2)  Add it to the ssh agent 
+
+	$ ssh-add ~/.ssh/id_ed25519
+
+
+https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account
+3) Go to your github.com account -> settings -> ssh and GPG keys -> add new key 
+	Add some name 
+	go to the file on your desktop ~/.ssh/id_ed25519, open the file in notepad, copy the text. 
+	paste this text in the github.com form for the key. 
+
+
+
+
+
+
 Git internals: 
 The data structure used isn't general-purpose. It's meant to be simple and specialized for Git. 
 
