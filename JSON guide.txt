@@ -1,0 +1,38 @@
+# JSON guide 
+
+JSON = JavaScript Object Notation 
+Used to transmit data over the web - particularly between backend and frontend 
+
+Data is in the form of name:value pairs 
+
+Each object is enclosed in curly braces
+
+Format: 
+name : value 
+
+name:value pairs are separated by commas 
+
+
+{
+name1:value1,
+name2:value2
+}
+
+Square brackets hold arrays separated by commas 
+
+arr1: [1, 2, 3] 
+
+
+Data Types: 
+
+Numbers, age: 20
+
+Strings, name : "Sudhanshu" 
+
+Boolean, student: true 
+
+Objects, person : { name: "G" , age: 18} 
+
+Null,    score: null 
+
+

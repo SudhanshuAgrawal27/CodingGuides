@@ -1,0 +1,31 @@
+Guide for the YAML format:
+
+- YAML is case sensitive
+
+- YAML DOES NOT allow using tabs
+
+# comment entries use # 
+
+# Writing lists: 
+
+
+# if you're writing it as a python type list, 
+# entries must be separated by comma + space 
+men: [John, Paul, George, Ringo]
+
+# if you're writing it the "conventional" way, 
+# entries should start indented (by a space)
+# followed by a hyphen + space 
+# then the entry 
+men:
+ - John 
+ - Paul 
+ - George 
+ - Ringo 
+
+
+
+# booleans : true/false 
+# when you read it in using python, it's automatically converted
+# to the boolean value
+is_ready: false 

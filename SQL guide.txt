@@ -1,0 +1,135 @@
+
+# start the sql CLI (like python) 
+$ mysql 
+
+# this should take you into a cluster kind of deal (the MySQL server) which may contain multiple databases 
+
+# see existing databases 
+SHOW DATABASES;   
+
+# All keywords are case insensitive, but all identifiers are case sensitive
+# a good convention (imo) is to keep commands in upper case and keywords in lower case to distinguish them easily 
+# sql is also semicolon terminated so you can type commands on multiple lines
+# if an output is going to multiple lines you have to end it with ;, not use Ctrl + C. Or you can type \c
+ 
+
+# Comment entries: 
+-- this is a single line comment 
+/* this is a multi line 
+comment */
+
+
+# Once you see a database you want to use, 
+$ USE database_name; 
+
+# alternatively, you could just start mysql with that database 
+$ mysql database_name; 
+
+# a single database can contain several tables = relations 
+
+To clarify the hierarchy once more, 
+-MySQL server 
+	-- database1 
+	-- database2 
+		-- table1 
+        	-- table2
+	-- database3 
+
+
+# char(20) means a string of length at most 20 
+
+# create a table 
+$ CREATE TABLE table_name(attribute1_name attribute1_type, attribute2_name attribute2_type ... ) 
+
+$ CREATE TABLE tbl(a int, b char(20)); 
+
+
+# you can declare a set of columns to be the primary key 
+
+$ CREATE TABLE tbl(a int, b char(20), PRIMARY KEY(a)) ; 
+
+
+# List the tables in this particular database 
+$ SHOW TABLES; 
+
+# Show a table's schema 
+$ DESCRIBE table_name; 
+
+Populating a table: 
+
+# Insert a tuple (entry) into a table 
+$ INSERT INTO table_name VALUES( v1, v2, ... )
+
+# Inserting the current date and time 
+$ INSERT INTO table_name VALUES(v1, v2, NOW(), ... )
+
+# Show the values in a table - print it 
+$ SELECT * FROM table_name; 
+
+
+# Bulk loading data - the first load that populates data from a file 
+LOAD DATA LOCAL INFILE 'file_name.del' INTO TABLE table_name; 
+
+Each line in the data frile is one tuple - one entry 
+Columns are separated by a tab character 
+Null values are specified using \N 
+
+1	first
+2	second
+3	\N
+
+If you want the commas to separate the columns rather than tabs, you can specify this 
+
+$ LOAD DATA LOCAL INFILE file_name.del INTO TABLE table_name FIELDS TERMINATED BY ','; 
+
+If any values are enclosed in double quotes for example, you need to account for this 
+
+$ LOAD DATA LOCAL INFILE file_name.del INTO TABLE table_name FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"';
+
+
+Note: You may run into the CR/LF issue - run dos2unix before loading files written in windows 
+
+Note: when specifying the file path, you should enclose it in quotes and use 'shared/file_name.del'
+
+
+# Delete a table 
+DROP TABLE table_name; 
+
+# Empty a table 
+TRUNCATE table_name; 
+
+
+# To run these commands in a file , the extension is .sql 
+
+# To run within the mysql server
+SOURCE foo.sql; 
+# To run directly from the shell 
+$ mysql class_db < foo.sql 
+
+
+
+# If you want to record the commands you type out in the mysql shell instead 
+
+mysql> TEE foo.txt 
+
+... the commands you run in your session ... 
+
+mysql> NOTEE; 
+
+or until you exit mysql 
+
+
+# You can quit mysql using 
+$ QUIT; 
+
+
+
+
+
+
+
+
+
+
+
+

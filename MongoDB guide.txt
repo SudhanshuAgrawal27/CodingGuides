@@ -1,13 +1,208 @@
+## MongoDB guide ##
+The main advantage is the ability to store JSON style objects
+
+# list of databases available 
+
+show dbs; 
+
+# use a particular database ( a set of tables)
+
+use testdb; 
+
+# 'db' refers to the currently selected database 
+
+db; 
+
+> outputs the name of the current database 
+
+# collections are automatically made when you insert something 
+# collections are like tables - multiple tables within a single database
+
+db.testcollection.insertOne({"id":1, "name" : John}); 
+
+# The object inserted is called a 'document' - a single data entry 
+# Collection = set of documents 
+
+# Each object/document has a unique '_id' field : you can either pass it in or it will be automatically created
+
+
+# drop the current database 
+
+db.dropDatabase(); 
+
+# drop a collection 
+
+db.mycol.drop(); 
+
+
+# if you want to create a collection manually (not just when inserting a doc) 
+
+db.createCollection('testcol'); 
+
+
+# mongodb supports datatypes like 
+	string, int, bool (true, false) , double, arrays, objects, null, datetime, code (like JS code)
+
+
+
+# insert documents into a collection
+
+	# One 	
+	db.mycol.insertOne({"id":1, "name":"John"}); 
+	
+	# Many - pass in as an array 
+	db.mycol.insertMany([{"id":1}, {"id":2}]); 
+
+	
+
+# Querying = find() 
+
+	db.collection.findX({object that represents the search condition}); 
+
+	Matching attribute values: 
+	
+		db.collection.findX({name: "John"}); 
+		db.collection.findX({"age": 19, "student": true});
+
+	Some condition on the attribute value: 
+		
+		{attribute_name: {$operator: value}) 
+	
+		db.collection.findX({age: {$gt: 20}}); 
+		
+		$gt, $lt, $lte, $gte, $ne, $in, $nin
+
+		db.collection.findX({age: {$nin: {"John", "Paul", "George", "Ringo"}}}); 
+
+
+	Multiple conditions: 
+
+		{$conjunction_operator: [ { condition1 } , { condition2 } ] } 
+	
+		db.collection.findX({$and: [{age: 19}, {classes: {$gt: 2} }] });
+
+		$and, $or, $nor, $not
+		
+
+	# One 
+		db.collection.findOne(); 
+	# Many 
+		db.collection.find(); 
+
+
+
+
+	
+# Update 
+
+	db.collection.update(selection_criteria, {$set: {updated_data} }) 
+	
+	db.collection.update({age: {$gt: 19}}, {$set: {"student": true} } ); 
+			
+	update(), findOneAndUpdate(), updateOne(), updateMany() 
+	all have similar syntaxes with (selection, criteria, updated_data) 
+
+	the difference is that updateX() is an atomic step - 
+		so you don't have to worry about race conditions 
+
+	findOneAndUpdate() also returns the modified document 
+
+	update() will only update one document, need to set option : {multi: true}
+
+	
+
+
+
+# Delete 
+
+	db.collection.remove({deletion_criteria}); 
+	
+	db.collection.remove({name: "John"}); 
+
+
+	# remove() removes all documents with the criteria
+
+	# if you want to remove only a single document, 	
+
+	db.collection.remove({name: "John"}, 1); 
+
+	
+	# if you want to drop all documents from a collection - but keep the collection 
+	# similar to SQL TRUNCATE	
+
+	db.collection.remove({}); 
+
+	
+
+# Projection - only return some of the fields 
+
+	# find() takes in an additional parameter to specify this 
+
+	db.collection.find({filter_condition},  {fields}); 
+
+	{name: 0, age: 1, student: 1}
+	
+	specify 0/1 for each field whether to include it or not 
+
+	if you specify even one field as 1, then only that field will be shown 
+
+	{name: 1} 
+		only the name field will be returned 
+	{name: 0}
+		everything but the name field will be returned 
+	so you need to only specify either the fields you want to keep or the ones you don't want to keep 
+	and the 'mode' is set automatically - either drop specified or keep specified 
+
+	# the _id field is always returned unless _id: 0 
+
+	db.collection.find({}, {name: 1, age: 1}); 
+
+
+# Aggregate functions 
+
+	db.collection.aggregate([ {} , {} ])
+
+	where each {} contains some filtering condition/operation 
+
+	{$match: {name: "John"}}     # contains the kind of conditions we're used to - match some cond or value
+
+	{$limit: 1} 		     # limit the output to one result 
+
+	{$match: {class_array: {$elemMatch: "CS143" } } }  # documents with class array with one element = CS143
+
+	{$unwind: '$schedule.class_array'} 		# returns one document for each element in the array 
+							# $path to the array is specified as the parameter 
+							# you can then index into each element in another step
+
+
+	{$group: {_id: "$attr_to_groupby", newfield1: {$sum: "$grades"} } }  # group by - _id specifies the fields to group by 
+
+	{$group: {_id: "newattrname":{"$path_to_attr"} }		      # if you want to rename the group by field 
+	
+	{$group: {_id: null, "count": {$sum: 1} } }  	  # _id: null operates over all elements in the collection
+
+
+	
+	
+	
+	
+	
+
+
+
+
+# Creating a cluster on MongoDB Atlas
 1. Create a MongoDB account 
 2. Access Atlas, which allows you to make clusters
 3. Follow the steps given by Atlas to create your cluster 
 4. Add details about IP addresses, user accesses etc. 
-5. In the local directory, 
+
+# To use MongoDB in JavaScript
+1. In the local directory, 
    $ npm install mongodb@3.6.3			# note there's a bug with 3.6.4
   
 
-6. import mdb
+2. import mdb
    const {MongoClient} = require('mongodb')
 
 
-7. create a main() 

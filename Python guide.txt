@@ -40,6 +40,8 @@ Python guide:
 3. Indexing 
 
 	a. General rule - include first index, exclude last index.
+		
+		The cool thing is that you can use a step size while indexing
 
 		[i : j : step_size] 	gives you all elements from [i, j) with step = step_size
 
@@ -86,8 +88,10 @@ Python guide:
 			print(x) 
 
 
-	'is'    operator 
-		checks whether two objects point to the same location of memory 
+	'==' vs 'is'    operator 
+		
+		== checks if the two values are the same 
+		is checks is the two objects point to the same location of memory 
 
 		it's like   &x == &y rather than x == y 
 
@@ -132,11 +136,16 @@ Python guide:
 	
 	you can also add conditions like set builder notation 
 
-	[VALUE for x in ITERATOR if CONDITION]  # put the condition at the end otherwise 
-											# you'll get an error about a missing else
+	if you want to use only an if statement: 
+		[VALUE for x in ITERATOR if CONDITION]  # put the condition at the end otherwise 
+							# you'll get an error about a missing else	
+	if you want both if and else 
+		[VALUE if CONDITION else ALTERNATE for x in ITERATOR] 
 
-	x = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-	[ t for t in x if t%2 == 0 ]
+
+	mylist = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+	[ t for t in mylist if t%2 == 0 ]
+	[ t if t%2 == 0 else t+1 for t in mylist] 
 	
 
 
@@ -286,7 +295,7 @@ Python guide:
 
 	# Good Practice - use a 'with' block - automatically closes the file 
 
-	with open("myfile.txt", "r) as file: 
+	with open("myfile.txt", "r") as file: 
 		data = file.read()
 
 
@@ -323,12 +332,13 @@ Python guide:
 
 	# adding an argument	      
 	parser.add_argument("-n",   				# short form
-			"nameOfArgument", 			# full name
-						nargs='?', 				# number of args
-				default = None,			# default value if nothing passed
-				help="A description")		# accessed by cmd --help
+			    "--nameOfArgument", 		# full name (must start with -)
+			     nargs='?', 			# number of args (see below)
+			     required=True,			# whether the script will run without this argument
+			     default = None,			# default value if nothing passed (see below)
+			     help="A description")		# accessed by cmd --help
 
-	# default 
+	# default value 
 	nice to keep 
 		default = None 
 	to see whether an arg was passed at all
@@ -362,6 +372,68 @@ Python guide:
 	vars(args)
 
 
+
+12.  Python modules and scripts 
+
+	One of the easiest ways to organize code is to use functions. 
+	
+	1. Often, a given function can be placed in a separate file of its own. 
+
+	# This is the file sum_function.py 
+
+	def sum1(): 
+		# code 
+	
+	# End of file sum_functions.py 
+
+	If we want to import these functions in some other file, we need two things 
+	
+	1) The directory that contains sum_functions.py must contain an empty 
+		__init__.py file that tells Python that this directory is a module 
+	
+	2) Inside the file that calls this module, 
+
+		# This file calls sum functions 
+
+		# If the module is in the same directory 
+			from sum_functions import sum1 
+
+		# If the module is in a subdirectory utils 
+
+			from utils.sum_functions import sum1 
+
+		# If the file is in a superdirectory 
+
+			sys.path.insert(0, "..") 
+			from sum_functions import sum1 
+
+
+	2. Often it's also nice to be able to run this function as a script using the terminal like  $ python sum_function.py 
+
+		In this scenario, it's useful to both have the function version and a script version. This is where we place the following code in the file containing the function (sum_function.py in this case)
+
+		if __name__ == '__main__': 
+			sum1() 
+
+		
+		This means that if the file is executed as the main function (executed directly, and NOT imported), then perform some actions (like call the function) 
+
+		This also allows us to pass in command line arguments  
+		Suppose we required two numbers 
+		$ python sum_function.py --arg1 34 --arg2 42 
+
+		We'd use the argparser in (11)
+
+		if __name__ == '__main__' : 
+			parser = ArgumentParser() 
+
+			# define arguments 
+
+			sum1(arg1, arg2) 
+
+
+
+
 x.  Miscellaneous useful commands : 
 
 	a. 	#  comment entry - python doesn't have support for multi line comments 
@@ -373,6 +445,20 @@ x.  Miscellaneous useful commands :
 			print(5) 
 
 		help(my_func)
+		
+		Common convention: 
+			def my_func(a, b): 
+			''' 
+			my_func(a, b): a short description of the function 
+		
+			Parameters: 
+			a <type> : description of the variable
+			b <type> : description of the variable 
+
+			Returns: 
+			<type>  : description of the return value 
+	
+			'''
 
 	
 	c. type(x)    # type of the object
@@ -408,7 +494,7 @@ x.  Miscellaneous useful commands :
 	g. Unpacking  
 
 		def my_func(*args): 		 # pass in how many ever arguments
-			print(args[2])  # the second argument passed in 
+			print(args[2])  # the third argument passed in 
 
 		def my_func(**kwargs): 		# pass in how many ever arguments by keyword 
 			print(kwargs["a1"])  # the argument passed in with NAME a1 
@@ -424,6 +510,11 @@ x.  Miscellaneous useful commands :
 		lambda ARGUMENTS : EXPRESSION 
 
 		lambda x : x**2 
+
+		NOTE: 
+			map function :  map(func, iterable) 
+			the result is always a list (if you want something else, use comprehension/typecast it)
+
 
 		map(lambda x: 2x+3, [1, 2, 3, 4])   
 

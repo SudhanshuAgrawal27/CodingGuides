@@ -4,6 +4,9 @@ bash/shell (POSIX) guide - Sudhanshu Agrawal (sudhanshu.agrawal@ucla.edu)
 Guide made for the POSIX shell while taking the course CS 97, Winter 21 at UCLA
 ========================================================================================================================
 
+------------------------------------------------------------------------------------------------------------------------
+Running commands 
+
 $ cmd				# run command
 $ cmd arg1 			# run cmd with positional arg1
 $ cmd -n arg1			# run cmd with optional argument arg1 of type -n
@@ -12,6 +15,8 @@ $ cmd arg1 arg2			# run cmd with arg1 then arg2 (if it only accepts one arg)
 					$ rm -rf . * 	 		# will remove everything with . then *
 
 
+------------------------------------------------------------------------------------------------------------------------
+Viewing directory contents 
 
 $ ls 				# list contents of directory
 
@@ -36,12 +41,18 @@ Typically,
 $ ls -la     			# everything in long list format
 
 
+------------------------------------------------------------------------------------------------------------------------
+Open processes 
+
 $ Ctrl + z			# suspend (put job in background)
 
 $ fg				# retrieve last job from background, put in fg 
 $ jobs 				# currently active jobs
 $ fg %jobnum			# put that job jobnum in the fg
 
+
+------------------------------------------------------------------------------------------------------------------------
+File handling 
 
 $ pwd				# print working directory
 $ cd ..				# go one level above in directories 
@@ -68,11 +79,15 @@ $ mkdir directoryname		# make a directory
 $ rm filename			# remove file 
 $ rm -r directoryname		# recursively remove the directory 
 
+------------------------------------------------------------------------------------------------------------------------
+Getting information 
 
 $ man commandname		# manual page (info about command)
 $ which command			# path of the particular command being used
 				find sy# (which executable is picked?)
 
+------------------------------------------------------------------------------------------------------------------------
+Printing
 
 $ cat file			# print out contents of file  
 
@@ -86,13 +101,33 @@ $ echo '$x'   -> $x		# single quotes gives val as it is
 $ echo "$x"   -> 5		# double quotes expand variables
 
 
+$ zcat compresedfile.zip 	# zcat allows us to print a compressed file without decompressing it
+
+------------------------------------------------------------------------------------------------------------------------
+Variables 
 
 $ x=5 				# create variable (*no spaces*)
 				# stored in session 
 $ unset x			# unsets the value of the variable 
 
+------------------------------------------------------------------------------------------------------------------------
+Miscellaneous commands 
 
 $ seq 5				# create a sequence of numbers
+
+$ shuf file.txt 		# shuffles the lines of the file 
+
+$ wc file.txt 			# number of lines, words, characters in the file 
+
+$ cut -d , -f 2,5 file.txt 	# projection operator : -d specifies the delimiter between columns, 
+				# -f specifies which columns to output 
+				# columns are 1, 2, 3, 4..  (starting at 1) 
+
+$ uniq file.txt  		# collapses consecutive lines that are identical 
+				# only consecutive lines - so you may need to sort first 
+				# -c can be used to produce the counts of the unique values 
+				# -d outputs a line only if it appears multiple times 
+				# -u outputs a line only if it appears only once 
 
 ------------------------------------------------------------------------------------------------------------------------
 chmod: CHMOD - Change file mode bits
@@ -129,9 +164,20 @@ $ tr SET1 [CHAR*]               # SET2 = CHARCHARCHARCHAR.... length of SET1
 sort: SORTING and COMPARING
 
 $ sort file			# sorts input line by line
+
 $ sort -u file 			# sorts and gives unique
+
 $ sort -r file 			# sorts in reverse order
 
+$sort -t , -k 3,3rn  file.csv   # sorts based on columns 3-3  
+				# -t specifies the delimiter between columns 
+				# n says that the data is numeric (default sort is lexicographic) 
+				# r says sort in reverse order 
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+Compare
 
 $ comm file1 file2 		# compares *sorted* file1 and *sorted* file2
 				# and retuns unique and common lines to each file
@@ -345,7 +391,8 @@ $ grep -i "PATTERN" FILE		# ignore case.
 
 
 ------------------------------------------------------------------------------------------------------------------------
-sed: SED				# modifies streams of TEXT
+sed: SED				
+# modifies streams of TEXT
 
 
 $ sed COMMAND FILE			# operates on the file/stdin
@@ -451,6 +498,7 @@ the $( ) can even give a command as an output.
 
 ------------------------------------------------------------------------------------------------------------------------
 Process substitution: 
+
 Passing the output of a process to another process
 diff <(cmd1) <(cmd2)		# note that there must not be space between <(
 
@@ -460,8 +508,56 @@ If you have multiple input arguments from stdin and want to reference them in so
 
 cmd $1 $2	
 
+
+------------------------------------------------------------------------------------------------------------------------
+Head and Tail 
+
+head -n 10 file.txt		# lines 1 - num_lines
+tail -n 10 file.txt 		# last 10 lines
+
+If you want lines 10-20  
+
+head -n 20 | tail -n 10 file.txt 
+
+------------------------------------------------------------------------------------------------------------------------
+AWK
+
+# Can be used to select lines based on column values 
+
+$ awk -F , '$3 > 120000' file.csv   # -F specifies the delimiter between fields 
+				    # we need to use single quotes to prevent variable expansion 
+				    # we can have any logical condition inside the quotes 
+
+# to use regexp on a column 
+
+$ awk '$2 ~ /REGEXP/' file.csv 	 # regexp pattern for column 2 
+								 # can use !~  for do not match
+					
+					
+------------------------------------------------------------------------------------------------------------------------
+Datamash 
+Used to perform aggregations on columns in a dataset 
+
+$ datamash [options] operation [field_num] operation [field_num] .. 
+
+
+$ datamash --sort -t, groupby 10,2 sum 3 < file.csv 
+
+	# -t, specifies the , is the delimiter 
+	# groupby columns 10, 2 
+	# sum the 3rd column 
+	# datamash groupby assumes that rows with tehs ame groupby value occur consecutively 
+	# so we need to sort based on the groupby attributes first 
+	# using --sort will automatically sort by the groupby attributes
+	
+
+$ datamash --sort -t, groupby 10,2 count 1 max 1 mean 3 < adult.data 
+
+	# calculates the count, max, mean within each group 
+
 ------------------------------------------------------------------------------------------------------------------------
 Symbolic Links:
+
 $ ln -s filename symlink	# creates a link to a particular file NAME
 				# points to whatever file has that name.
 				# dangling symlink if no file with that name exists
@@ -532,7 +628,7 @@ $ ./permutation.sh 		# runs shell script
 
 ------------------------------------------------------------------------------------------------------------------------
 
-to set the path (to look for executables)
+Set the path (to look for executables)
 
 	1. create a file :   
 	emacs ~/.bash_profile 

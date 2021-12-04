@@ -1,0 +1,325 @@
+PHP = PHP: Hypertext Preprocessor
+PHP is a scripting language. It is used to make interactive Web pages.
+
+A PHP file can contain text, HTML, CSS, JavScript and PHP code 
+It is executed on a server and the result it returned as HTML (or any other format you choose)
+(Similar to how React produces HTML)
+
+To see the output of the PHP file go to the url host/filename.php 
+
+Like Python, there are no variable types
+But the rest of the syntax is very C++ ish, with curly braces required, 
+while() if(), etc 
+
+The main advantage of PHP is that it can be executed "inline" with HTML.
+It can generate (say) strings that can be inserted into the HTML at a particular position
+
+
+- Inserting PHP code 
+
+	<?php
+
+	//Code
+	echo "Hello World!";   // displays the text on the webpage 
+
+	?>
+
+	<html><body>
+	
+	The time today is <?php echo "some value";  ?>	<br> 
+	
+	</body></html>
+
+	Each of the <?php  ?> blocks is a whole php code snippet s
+
+
+
+
+- like with MySQL, command names are not case sensitive, but variable names are
+
+- all commands terminate with a semicolon
+
+- comments are made using  //  or  #   or /*   */ for multiline comments
+
+- Variables:
+
+	Assign: 
+
+	$colour = "red; 
+
+	Use: 
+	
+	echo $color; 
+	echo "My favourite color is ". red . "<br>"; 
+
+	// note,  .  is used in place of + to concatenate 
+
+	// every single time you refer to a variable, it will be using 
+	// the dollar sign  $x 
+	// that dollar sign is pretty much a part of the variable name
+
+	// you can also insert variables into strings (variable interpolation) 
+	$mynewstring = "My favourite colour is {$colour}!"; 
+
+- Global variables 
+	
+
+
+	$x = 5; 
+	
+	function myTest() 
+	{	
+
+		// global keyword used to access a global variable inside a function (like Julia)
+		global $x; 
+		$x = $x + 1; 
+
+		// all global variables are also stored in a globals array
+		$GLOBALS['x'] = $GLOBALS['x'] + 1; 	
+	}
+
+
+- Echo and Print 
+
+	echo has no return value, print returns 1 
+	(so it can be used in expressions) 
+	echo is marginally faster than print 
+
+	echo "This", "is", "how", "you", "pass", "multiple", "parameters"; 
+
+	echo "This is how to use variables like x = ".$x ; 
+
+	print "print can only take in one string" ; 
+	print "but it can show variables like x = ".$x; 
+
+	echo "We can also insert <h1> HTML code </h1> "; 
+
+	// this is the real power of the statement 
+	// since we can modify the webpage and add in new elements 
+
+
+- null values 
+	
+	Represented as  null 
+	$x = null; 
+
+- boolean 
+	
+	$x = true; 
+	$x = false; 
+
+
+- string functions 
+	
+	$x = strlen("hello"); 
+
+	$x = str_word_count("hello world"); 
+
+	$x = strpos($string_to_search_in, $string_to_be_found); 
+
+	
+- if else elseif 
+
+	if ($x > 5)
+	{
+	}
+	elseif ($x > 3)
+	{
+	}
+	else
+	{
+	}
+
+- switch case (very similar to the C++ style of doing it)
+
+	switch ($color)
+	{
+		case "red":
+			echo "hi"; 
+			break;
+		case "blue";
+			break;
+		default:
+			echo "no colour";
+	}
+
+
+- While loop 
+
+	$x = 10; 
+
+	while($x > 5)
+	{
+		echo $x; 
+		$x--; 
+	}
+
+- For loop 
+	
+	for($x = 0; $x <=10; $x++)
+	{
+		echo $x; 
+	}
+
+
+- For each loop 
+
+	// used to loop over arrays 
+	$colors = array("red", "green", "blue", "yellow"); 
+
+	foreach ($colors as $c)
+	{
+		echo $c; 
+		break; 
+	}
+
+	// can also be used to loop over dictionaries 
+	$mydict = array("A"=>3, "B"=>4); 
+	
+	foreach ($mydict as $k=>$v)
+	{
+		print "Key = ".$k." and value = ".$v; 
+	}
+
+
+- Functions 
+	
+	// start the declaration using  function myfunc() {}
+	// (similar to Julia) 
+
+	function insert_text_block($myvar)
+	{
+		echo " This <br> is <br> a <br> block <br> of <br> text <br> x = ".$myvar; 
+		return $myvar+1; 
+	}
+
+	$x = 5; 	
+	$y = insert_text_block($x); 
+
+	
+	// no data types like python
+
+	// can pass by reference like C++ 
+
+	$num = 5; 
+	function square_num(&$x)
+	{
+		$x = $x * $x; 
+	}
+	square_num($num); 
+	// num is now updated 
+
+
+
+- Arrays 
+	
+	// arrays are declared by using the array() constructor 
+	// (similar to numpy)	
+
+	$arr = array("A", "B", "C"); 
+	echo count($arr); 	// length of the array
+
+	for($i = 0; $i < count($arr); $i++)
+	{	
+		echo $arr[$i]; 
+	}
+	
+	2D arrays can be made by nesting array(array(), array()) by row
+
+- Associative arrays = dictionaries 
+
+	$index = ("A"=>1, "B"=>2);
+	$index["C"] = 3; 
+	echo "The value of C = ".$index["C"]; 
+
+
+- Superglobals 
+
+	superglobals are variables that can be accessed from any file 
+
+	$_SERVER   contains info about the script, host, etc 
+	$_REQUEST  collects data after submitting an HTML form 
+	$_POST	   collects form data after submitting an HTML form with method="post" 
+	$_GET      collects form data after submitting a form with method="get" 
+
+
+		
+- Forms (what we're really here for) 
+
+	<html> <body>
+	<form method="post" action="form_handler.php"> 
+		
+		Name: <br> 
+		<input type="text" name="name"> <br>  /* the name field is crucial */
+		
+		<input type="submit"> 
+
+	</form> 
+	</body> </html> 
+
+	// this sends the values to the form_handler.php file 
+
+	// inside form_handler.php 
+
+	<html> 
+	<body>
+
+	Welcome <?php echo $_POST["name"];  ?> <br> 
+	
+	</body>
+	</html>
+	
+
+	// you could technically use GET in exactly the same way
+	// but when get is used, all variables are displayed in the url 
+	// so they are visible to everyone 
+	// this is only useful if you want to bookmark that page 
+	// post won't display the variables in the url 
+
+
+
+// Connecting PHP WITH YOUR MYSQL DATABASE
+
+	
+- Connecting to a mysql database 
+	// you run this within your PHP file 
+
+	//   connect to mysql running locally, username = cs143, pwd = '', database=class_db
+	$db = new mysqli('localhost', 'cs143', '', 'class_db');
+	if($db->connect_errno > 0)
+	{
+ 		die('Unable to connect to database ['.$db->connect_error.']');
+	}
+
+
+
+- issuing a query 
+
+	// you need to first write up the SQL query as you normally would 
+	$query = "SELECT * FROM Movie"; 
+	$res = $db->query($query); 
+
+	// this returns a mysqli_result object 
+	// we can retrieve the actual values row by row using 
+		$row = $res->fetch_assoc()
+
+	// so we can iterate over the table
+	while($row = $res->fetch_assoc())
+	{
+		// each row is returned as a dictionary (associated array) with columns = keys
+		$id = $row['id'];
+		$title = $row['title'];
+		print "$id, $title <br>";
+	}
+
+- free the result object after the while loop 
+	$res->free(); 
+
+
+- total number of results found 
+	$res->num_rows(); 
+
+	
+	
+
+

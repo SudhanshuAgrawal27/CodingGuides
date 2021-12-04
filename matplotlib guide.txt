@@ -1,0 +1,21 @@
+Guide to using fig, ax in matplotlib 
+
+
+# Initialize empty subplots object 
+fig, ax = plt.subplots()
+
+# Use the ax object to actually add content 
+ax.plot(X, Y) 
+ax.set(title="Plot of X vs Y", xlabel="Variable X", ylabel="Variable Y") 
+ax.set_xlabel("x values") 
+
+# rotate the labels 
+plt.xticks(rotation=90)
+
+# save the plot 
+plt.savefig(save_path, dpi=200, bbox_inches="tight")
+
+# display the plot 
+plt.show() 
+
+

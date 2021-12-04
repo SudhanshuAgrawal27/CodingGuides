@@ -298,9 +298,42 @@ https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-
 https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account
 3) Go to your github.com account -> settings -> ssh and GPG keys -> add new key 
 	Add some name 
-	go to the file on your desktop ~/.ssh/id_ed25519, open the file in notepad, copy the text. 
+	go to the file on your desktop ~/.ssh/id_ed25519.pub, open the file in notepad, copy the text. 
 	paste this text in the github.com form for the key. 
 
+
+
+.gitignore : 
+Tells the repo not to track a particular file or folder or globbing pattern 
+place it in the main level of the directory 
+each line contains a globbing pattern to be ignored 
+
+# will ignore the folder and all its contents
+folder_name/ 	
+
+# if you want to keep a folder, but not its contents, place a .gitkeep file in the folder 
+# then in the .gitignore file
+folder_name/
+!folder_name/.gitkeep 
+# this is because you can't track an empty directory 
+
+Adding a file to a .gitignore file after it's already been committed: 
+https://stackoverflow.com/a/1139797
+
+1. Commit any pending changes
+
+2. Modify the .gitignore file to include the new thing you want to ignore 
+
+3. Remove any changed files from the index - staging area 
+	git rm -r --cached .
+
+4. Add back all the files 
+	git add . 
+
+5. Commit the changes 
+	git commit -m"Added .gitignore"
+
+	
 
 
 
