@@ -1,28 +1,82 @@
-1. Installing Node.js
-https://nodejs.org/en/download/
+-------------------------------------------------------------------------------
+INSTALLATION
 
-2. make directory tic-tac-toe
+1. Install Node.js
+	https://nodejs.org/en/download/
 
-3. In cmd,
-	 cd tic-tac-toe
 
-4. creating react app
-   In cmd, 
+2. Install React
 	 npm install react
-	 npx create-react-app tic-tac-toe 
-
-5. cd tic-tac-toe 
 
 
-6. starting the react-app - get the url 
-   In cmd, 
-	 cd tic-tac-toe
-	 npm start
+npm = Node package manager 
 
-7. deleting all files inside the directory src
-   In cmd, 
-	del *
+-------------------------------------------------------------------------------
+GETTING STARTED WITH REACT
 
+Initialize the react app 
+1. npm init create-react-app myapp 
+
+This creates a new directory myapp in your cwd. 
+This directory is all you need (for a static website) and becomes your git repository 
+
+Delete unnecessary files in src
+2. cd myapp/src 
+   del *     
+
+3. create an index.js and index.css file inside src 
+index.js : 
+	import React from 'react';
+	import ReactDOM from 'react-dom';
+	import './index.css';
+
+
+	ReactDOM.render(
+    	<h1> Hello, World! </h1>,
+    	document.getElementById('root')
+  	);
+
+4. You can now run the app with 
+	npm start
+
+There's a v good chance you're using github, so it's useful to deploy the app on gh-pages
+
+-------------------------------------------------------------------------------
+DEPLOYING ON GH-PAGES
+
+5. Install gh-pages in this app (in dev mode) 
+	cd myapp
+	npm install gh-pages --save-dev 
+
+6. Update package.json 
+
+	Add the property  "homepage": "https://{username}.github.io//{reponame}
+
+	Inside the "scripts" property, add 
+		"predeploy": "npm run build" 
+		"deploy": "gh-pages -d build" 
+
+7. Push to github 
+
+	git init 
+	git add --all 
+	git commit -m "initial commit" 
+	git branch -M main 
+	git remote add origin "https://github.com/{repo}"
+	git push -u origin main 
+
+8. Deploy the app to gh-pages 
+
+	npm run deploy  
+	
+This will automatically create a gh-pages branch in the repo (non-mergeable) 
+
+9. Make sure the site is being built from the gh-pages branch 	
+	Settings -> Pages -> Source -> gh-pages branch 
+
+
+-------------------------------------------------------------------------------
+COMPONENTS 
 
 The fundamental unit of a react app is called a React.Component
 It's a bit of code (class) that all components will inherit.
@@ -35,6 +89,9 @@ class myComponent extends React.Component
 
 }
 
+-------------------------------------------------------------------------------
+USING A COMPONENT 
+
 Creating your component to be used 
 <myComponent />				# an html node without children
 
@@ -43,6 +100,9 @@ Creating your component to be used
  />
 
 
+-------------------------------------------------------------------------------
+PROPS
+
 arguments are passed by key value through the object 
 
 they are stored in the dictionary - props "properties"
@@ -50,7 +110,8 @@ you can refer to the args within the function using
 	this.props.name 
 this.props = properties PASSED IN when calling the object.
 
-
+-------------------------------------------------------------------------------
+RENDER
 
 Another fundamental bit of code is the render() function. 
 render returns a React element which is a description of what to render. 
@@ -64,6 +125,9 @@ render()
 
 Inside render,
 
+-------------------------------------------------------------------------------
+JSX 
+
 When referring to variables in JSX, use { varname }
 
 
@@ -76,6 +140,8 @@ so you can group all those components in one style
 </button>
 
 
+-------------------------------------------------------------------------------
+STATE 
 
 IMPORTANT: Every component has a state
 state is how you remember things you've done.
@@ -99,6 +165,11 @@ Accessing state:
 
 the state is private to the object.
 
+If something doesn't have a state, and just has a render(), 
+define it as a function component which takes props as an argument.
+
+-------------------------------------------------------------------------------
+BASIC INTERACTION 
 
 To create an interactive component which works by clicking,
 	<button onClick={ () => #what happens when you click#}
@@ -118,17 +189,56 @@ If you want to change the state when you click,
 	<button onClick={ () => this.setState({value1: 1, value2: 2})} >
 
 
+-------------------------------------------------------------------------------
+SETSTATE 
+
 When this.setState() is called, React re-renders the given component,
 and also any child components
 
 
+-------------------------------------------------------------------------------
+DELAY THE APPEARANCE OF A COMPONENT 
+
+constructor(props)
+  {
+    super(props); 
+    this.state = {
+      visible: false 
+    }
+  }
+  
+  componentDidMount()
+  {
+    setTimeout(
+      function()
+      {
+        this.setState({visible:true})
+      }.bind(this), 
+      3000)
+  }
+
+-------------------------------------------------------------------------------
+FADE IN A COMPONENT 
+
+npm install react-fade-in
+
+import FadeIn from 'react-fade-in/lib/FadeIn';
+
+
+<FadeIn> 
+
+	Components to be faded in 
+
+</FadeIn> 
+
+-------------------------------------------------------------------------------
+ARRAYS 
 
 Creating an array: 
 	Array(10).fill(0) 
 
 
-If something doesn't have a state, and just has a render(), 
-define it as a function component which takes props as an argument.
+
 
 
 

@@ -39,6 +39,9 @@ All of the following go within the <body>
 <a href="https://www.google.com"> Google </a>  # the <a> tag defines a hyperlink
 						# if there's no href, it's a placeholder for a hl
 
+make an image a hyperlink 
+<a href="..">  <img>  </img>  </a> 
+
 -----------------------------------------------------------------------------------------------------------
 -IMAGES:
 

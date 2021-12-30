@@ -6,6 +6,9 @@ Also control the layout of multiple elements on a single webpage at once.
 Called cascading because the style of the parent element applies to the child elements
 	if you make the color of the body text = blue, all headings, paragraphs etc will also be blue
 
+-------------------------------------------------------------------------------
+WAYS TO INCLUDE CSS 
+
 For inline CSS - refer to HTML guide 
 
 Internal CSS  - define styling for the webpage only 
@@ -34,3 +37,46 @@ External CSS - keep the CSS stuff in another .css file
 
 </body>
 </html> 
+
+
+-------------------------------------------------------------------------------
+SPECIFYING CSS 
+
+By tag name 
+
+body{
+
+	background-color: blue; 
+	font-size: 12px;
+}
+
+
+By class
+
+.button{
+
+}
+
+
+By id 
+
+#ele15{
+
+}
+
+-------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------
+MISCELLANEOUS 
+
+- If and SVG doesn't scale properly for some reason, it may be because it has 
+height and width manually defined in its code. You can go in and manually remove this 
+
+
+
+
+
+
+
+
