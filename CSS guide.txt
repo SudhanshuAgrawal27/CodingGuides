@@ -44,7 +44,8 @@ SPECIFYING CSS
 
 By tag name 
 
-body{
+body
+{
 
 	background-color: blue; 
 	font-size: 12px;
@@ -53,18 +54,38 @@ body{
 
 By class
 
-.button{
+.button
+{
 
 }
 
 
 By id 
 
-#ele15{
+#ele15
+{
+
+}
+
+
+Tags that are nested 
+
+.navbar img 
+{
 
 }
 
 -------------------------------------------------------------------------------
+SPECIFYING SIZES 
+
+If you want something to be scalable, don't use px values 
+Instead use vw units 
+
+font-size: 4vw  
+
+This means that the font size will be 4% of the viewport width 
+which can scale to the container like for a mobile
+
 
 
 -------------------------------------------------------------------------------

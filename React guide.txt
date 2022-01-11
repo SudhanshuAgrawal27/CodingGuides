@@ -195,6 +195,11 @@ SETSTATE
 When this.setState() is called, React re-renders the given component,
 and also any child components
 
+i.e, it calls the render() function (only), then proceeds to the next line after the setState() statement (setState doesn't cause you to break out of the current execution)  
+
+(Note, render() should never call setState() because that would give us a cycle) 
+
+
 
 -------------------------------------------------------------------------------
 DELAY THE APPEARANCE OF A COMPONENT 
@@ -239,8 +244,29 @@ Creating an array:
 
 
 
+-------------------------------------------------------------------------------
+BINDING 
+
+If you pass in a member function as an argument  
+	Ex. onClick = {this.setName} 
+
+You need to bind the function beforehand, otherwise it has no idea what 'this' is when it is called
+
+	this.setName = this.setName.bind(this) 
+
+	binds this.setName to 'this', the current class 
+
+You should perform these binds in the constructor 
+	constructor(props)
+	{
+		super(props) 
+		... 
+		
+		this.setName = this.setName.bind(this); 
+	}
 
 
+-------------------------------------------------------------------------------
 
 
 
