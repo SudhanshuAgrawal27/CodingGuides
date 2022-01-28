@@ -1,0 +1,336 @@
+// React Native guide 
+
+---------------------------------------------------------------------------
+Background ----------------------------------------------------------------
+---------------------------------------------------------------------------
+Difference with web apps?
+-------------------------
+
+    React is a JS library/framework 
+
+        React DOM library is used to render it in the browswer 
+
+        React Native is another library that can compile react components to mobile devices 
+
+React Native uses JavaScript to access your platform's APIs. 
+
+Advantage?
+-----------
+
+React Native allows us to use React to create native iOS and Android applications 
+    You can use one codebase for both iOS and Android 
+
+
+Contains lots of built in components and APIs to display various common things - buttons, image, slider, etc
+
+
+---------------------------------------------------------------------------
+Setup ----------------------------------------------------------------
+---------------------------------------------------------------------------
+
+
+https://reactnative.dev/docs/environment-setup
+
+
+1. Install chocolatey package manager on windows if not already there 
+
+2. Open cmd in admin mode 
+
+    3a. Install JDK 11 
+        $ choco install -y openjdk11
+
+    3b. Install Node if not already installed
+        Check using 
+        $ node -v 
+
+        Install using 
+        $ choco install -y nodejs-lts
+
+
+4. Install Android Studio   : https://developer.android.com/studio/index.html
+
+5. Android Studio -> SDK Manager -> Install Android 10 
+
+6. Add ANDROID_HOME to env variables  (refer to https://reactnative.dev/docs/environment-setup)
+
+7. Add platform-tools to path (refer to https://reactnative.dev/docs/environment-setup)
+
+8. Create the new app 
+   $ npx react-native init FirstMobApp
+
+9. Android Studio -> More actions -> Virtual Device Manager -> Create Device -> Choose your phone (Pixel 2 default) -> Android version (Q), 29
+
+    10. Press the green play button to run it - phone should boot up
+
+
+12. Start Metro
+    $ cd FirstMobApp 
+    $ npx react-native start   
+
+13. Open a new terminal 
+    Run the app on Android
+    $ cd FirstMobApp
+    $ npx react-native run-android 
+
+
+---------------------------------------------------------------------------
+Working with the emulator  ----------------------------------------------------------------
+---------------------------------------------------------------------------
+
+1. Edit App.js to make changes 
+
+2. tap r in the metro window to reload app in mobile (also reloads if you save file in vscode)
+
+---------------------------------------------------------------------------
+Hello, World! ----------------------------------------------------------------
+---------------------------------------------------------------------------
+
+Put the following in App.js 
+
+```
+    import React from 'react';
+
+    import{Text, View} from 'react-native';
+
+    const HelloWorldApp = () => 
+    {
+        return (
+            <View>
+            <Text> Hello, World! </Text>
+            </View>
+        )
+    }
+
+    export default HelloWorldApp; 
+
+
+```
+
+---------------------------------------------------------------------------
+Basics ----------------------------------------------------------------
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+Views 
+------
+
+A view is the basic building block of UI.
+It is a small rectangular element on the screen which can be used to display text, images, forms, etc. 
+Every single visual element of the app is a view including a line of text, button, etc.
+Views can contain other views etc. 
+
+    Cf. <div> 's in web development 
+
+---------------------------------------------------------------------------
+Native Components 
+-----------------
+
+You would normally make views in Java/Kotlin or Swift/Objective C for Android and iOS. 
+React native allows you to make components in JavaScript (Using React) and it then compiles those into Android/iOS views. 
+It essentially creates the same code that Java/Swift would eventually. Which is why they are called Native Components. 
+
+Ex. 
+    <View> in React Native is  <ViewGroup> in Android and <UIView> in iOS and is similar to <div> in web dev 
+
+---------------------------------------------------------------------------
+Core Components
+---------------
+
+React Native     ~Web 
+<View>          <div>  (Non scrolling)
+<Text>          <p> 
+<Image>         <img> 
+<ScrollView>    <div>  (Scrolls)
+<TextInput>     <input type="text">
+
+You will need to import the core components you use at the beginning of the file 
+
+    import React from 'react'; 
+    import {Text, View} from 'react-native';  
+
+
+Image
+-----
+
+Has a source parameter
+The value goes inside {}
+
+<Image source= {require("./images/myimg.png")} />
+
+<Image source={{uri:"https://reactnative.dev/docs/assets/p_cat2.png"}} />
+
+---------------------------------------------------------------------------
+TextInput
+---------
+
+A form of input type text  - similar to <input type="text"> 
+
+<TextInput
+    style = {{borderColor: "black", borderWidth: 1}}
+    placeholder="Do you like elephants?"
+/>
+
+---------------------------------------------------------------------------
+Button 
+------
+
+    <Button 
+        title="DROP CLASS"
+        onPress={ () => {setIsEnrolled(false);} }
+        disabled={!isEnrolled}
+    /> 
+
+the onPress() prop that needs to be set to some function
+the title prop contains the text inside the button
+the disabled prop prevents it from being clicked 
+
+---------------------------------------------------------------------------
+React Native Fundamentals ----------------------------------------------------------------
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+JSX 
+----
+JavaScript Extension 
+JSX IS JAVASCRIPT 
+It allows you to create elements 
+Both React and React Native use JSX 
+For example, <Text> is JSX 
+It allows you to use your JavaScript variables inside these components 
+
+---------------------------------------------------------------------------
+Components 
+----------
+
+- Components could be either a function or a class 
+
+- As a function: 
+Whatever the function *returns* is rendered as a react component
+    
+    const myComp = () => {
+        return (
+            <Text> Hello, World! </Text>
+        );
+    };
+
+- You then export this module. If you use export default, then this function is the fallback one for this module 
+
+    export default myComp; 
+
+- This can then be imported and used elsewhere 
+
+- By nesting various core components you can create a custom component wrapped inside a function. 
+
+- You can also "call" your custom components within other custom components 
+    i.e., you can render child components inside parent components 
+
+    const Gallery = () => {
+        return (
+          <Picture /> 
+          <Picture />  
+        );
+    }
+
+- As a class : 
+// needs to implement a render() function 
+
+    import React, {Component} from 'react'; 
+
+    class Student extends Component {
+        
+        render()
+        {
+            return (
+                <View> 
+                    <Text> I am a student! </Text> 
+                </View>
+            ); 
+        }
+    }
+
+---------------------------------------------------------------------------
+Props 
+-----
+
+You can 'customize' components with properties (Props) 
+
+const Cat = (props) => {
+    return( 
+        <View> 
+            <Text> Hi, my name is {props.name} </Text>
+        </View>
+    );
+}
+
+When creating the component (instantiating it), you can pass in these props by name 
+
+<Cat name="Sam"/> 
+
+
+---------------------------------------------------------------------------
+State 
+-----------------------------------------------------------------------------
+
+Traditionally, only class components could have state.
+But using React Hooks, even function components can have state now. 
+
+As a class:
+----------
+First need to import the component class 
+
+    import React, {Component} from "react"; 
+
+Define the component as a class that extends the Component class 
+
+    class Student extends Component {
+
+        // It has a state object 
+        state = {isEnrolled: true}; 
+
+        // Accessed using this.state.isEnrolled 
+
+        render()
+        {
+            return(
+            <> 
+                <Text> Student enrollment status = {this.state.isEnrolled} </Text> 
+            </>
+            );
+        }
+    }
+
+You need to set state using the this.setState() function 
+
+    this.setState({isEnrolled: false});
+
+
+As a function: 
+--------------
+If you want to have a state for a function component, you need to use hooks 
+
+    import React, {useState} from 'react'; 
+
+    const Student = (props) => {
+
+        // call the useState function to create a new state variable 
+        // it creates the variable with an initial value and a method which is used to set it
+        // [<getter>, <setter>] = useState(<initialValue>)
+
+        const [isEnrolled, setIsEnrolled] = useState(true); 
+
+        // you can access the state variable directly
+
+        return(
+            <View> 
+                <Text> Student enrollment status = {isEnrolled} </Text>
+            </View>
+            
+        );
+
+    }
+
+If you want to set the state, you need to use the setIsEnrolled function 
+
+    setIsEnrolled(false); 
+
+
+
+---------------------------------------------------------------------------
